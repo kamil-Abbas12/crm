@@ -10,15 +10,15 @@ const verticals = [
 
 export default function LeadsByVertical() {
   return (
-    <div className="bg-[#111111] border border-white/5 rounded-xl p-5">
-      <div className="flex items-center justify-between mb-5">
-        <div>
-          <h3 className="text-white font-black text-base tracking-tight">
+    <div className="bg-[#111111] border border-white/5 rounded-xl p-4 sm:p-5 w-full">
+      <div className="flex items-start sm:items-center justify-between mb-4 sm:mb-5 gap-2">
+        <div className="min-w-0">
+          <h3 className="text-white font-black text-sm sm:text-base tracking-tight truncate">
             Leads by Vertical
           </h3>
           <p className="text-gray-600 text-xs mt-0.5">This month's distribution</p>
         </div>
-        <span className="text-xs text-red-400 font-semibold bg-red-950/50 border border-red-900/40 px-2.5 py-1 rounded-full">
+        <span className="text-xs text-red-400 font-semibold bg-red-950/50 border border-red-900/40 px-2 sm:px-2.5 py-1 rounded-full whitespace-nowrap shrink-0">
           3,847 total
         </span>
       </div>
@@ -26,22 +26,22 @@ export default function LeadsByVertical() {
       <div className="space-y-3">
         {verticals.map((v) => (
           <div key={v.name}>
-            <div className="flex items-center justify-between mb-1">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between mb-1 gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                 <span
-                  className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                  className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full flex-shrink-0"
                   style={{ backgroundColor: v.color }}
                 />
-                <span className="text-gray-300 text-sm font-medium">{v.name}</span>
+                <span className="text-gray-300 text-xs sm:text-sm font-medium truncate">{v.name}</span>
               </div>
-              <div className="flex items-center gap-3">
-                <span className="text-gray-500 text-xs">{v.count.toLocaleString()}</span>
-                <span className="text-white text-sm font-bold w-8 text-right">
+              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                <span className="text-gray-500 text-xs hidden xs:inline sm:inline">{v.count.toLocaleString()}</span>
+                <span className="text-white text-xs sm:text-sm font-bold w-7 sm:w-8 text-right">
                   {v.pct}%
                 </span>
               </div>
             </div>
-            <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+            <div className="h-1.5 sm:h-2 bg-white/5 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full transition-all duration-700"
                 style={{
@@ -56,7 +56,7 @@ export default function LeadsByVertical() {
       </div>
 
       {/* Combined bar */}
-      <div className="mt-4 h-3 rounded-full overflow-hidden flex">
+      <div className="mt-3 sm:mt-4 h-2.5 sm:h-3 rounded-full overflow-hidden flex">
         {verticals.map((v) => (
           <div
             key={v.name}

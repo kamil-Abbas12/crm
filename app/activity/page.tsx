@@ -65,43 +65,60 @@ export default function ActivityPage() {
   return (
     <div className="flex min-h-screen bg-[#0a0a0a]">
       <Sidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         <Topbar title="Log Activity" />
-        <main className="flex-1 overflow-y-auto p-5">
-          <div className="max-w-5xl mx-auto space-y-5">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-5">
+          <div className="max-w-5xl mx-auto space-y-3 sm:space-y-5">
 
             {/* Today summary */}
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
               {[
                 { label: "Calls", value: todayCalls, icon: "📞", color: "text-orange-400" },
                 { label: "Leads", value: todayLeads, icon: "🎯", color: "text-red-400" },
                 { label: "Transfers", value: todayTransfers, icon: "🔄", color: "text-blue-400" },
                 { label: "Conversions", value: todayConversions, icon: "✅", color: "text-green-400" },
               ].map(s => (
-                <div key={s.label} className="bg-[#111] border border-white/5 rounded-xl p-4 text-center">
-                  <p className="text-xl">{s.icon}</p>
-                  <p className={`text-2xl font-black ${s.color} tabular-nums`}>{s.value}</p>
-                  <p className="text-gray-600 text-xs mt-0.5">{s.label} today</p>
+                <div key={s.label} className="bg-[#111] border border-white/5 rounded-xl p-3 sm:p-4 text-center">
+                  <p className="text-lg sm:text-xl">{s.icon}</p>
+                  <p className={`text-xl sm:text-2xl font-black ${s.color} tabular-nums`}>{s.value}</p>
+                  <p className="text-gray-600 text-[10px] sm:text-xs mt-0.5">{s.label} today</p>
                 </div>
               ))}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-5">
               {/* Log form */}
-              <div className="bg-[#111] border border-white/5 rounded-xl p-5">
-                <h3 className="text-white font-black text-base mb-4">Log New Activity</h3>
+              <div className="bg-[#111] border border-white/5 rounded-xl p-4 sm:p-5">
+                <h3 className="text-white font-black text-sm sm:text-base mb-3 sm:mb-4">Log New Activity</h3>
 
                 {success && (
-                  <div className="mb-4 p-3 bg-green-950/60 border border-green-800/40 rounded-lg text-green-400 text-sm flex items-center gap-2">
+                  <div className="mb-3 sm:mb-4 p-3 bg-green-950/60 border border-green-800/40 rounded-lg text-green-400 text-xs sm:text-sm flex items-center gap-2">
                     ✅ Activity logged successfully!
                   </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
                   {/* Type */}
                   <div>
                     <label className="block text-gray-500 text-xs font-bold tracking-widest uppercase mb-2">Activity Type</label>
-                    <div className="grid grid-cols-1 gap-1.5">
+                    {/* Mobile: horizontal scrollable chips; Desktop: vertical list */}
+                    <div className="flex gap-2 overflow-x-auto pb-1 sm:hidden">
+                      {TYPES.map(t => (
+                        <button
+                          key={t.value} type="button"
+                          onClick={() => setForm({ ...form, type: t.value })}
+                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-left transition shrink-0 ${
+                            form.type === t.value
+                              ? "bg-red-600/15 border-red-700/50 text-white"
+                              : "bg-white/3 border-white/8 text-gray-500"
+                          }`}
+                        >
+                          <span className="text-sm">{t.label.split(" ")[0]}</span>
+                          <span className="text-xs font-semibold whitespace-nowrap">{t.label.split(" ").slice(1).join(" ")}</span>
+                        </button>
+                      ))}
+                    </div>
+                    <div className="hidden sm:grid grid-cols-1 gap-1.5">
                       {TYPES.map(t => (
                         <button
                           key={t.value} type="button"
@@ -122,13 +139,13 @@ export default function ActivityPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
                     <div>
                       <label className="block text-gray-500 text-xs font-bold tracking-widest uppercase mb-1.5">Vertical</label>
                       <select
                         value={form.vertical}
                         onChange={e => setForm({ ...form, vertical: e.target.value })}
-                        className="w-full bg-[#1a1a1a] border border-white/8 rounded-lg px-3 py-2 text-white text-sm outline-none focus:border-red-700/50 transition"
+                        className="w-full bg-[#1a1a1a] border border-white/8 rounded-lg px-2 sm:px-3 py-2 text-white text-xs sm:text-sm outline-none focus:border-red-700/50 transition"
                       >
                         <option value="">All verticals</option>
                         {VERTICALS.map(v => <option key={v} value={v}>{v}</option>)}
@@ -140,7 +157,7 @@ export default function ActivityPage() {
                         type="number" min="1" max="999"
                         value={form.count}
                         onChange={e => setForm({ ...form, count: parseInt(e.target.value) || 1 })}
-                        className="w-full bg-[#1a1a1a] border border-white/8 rounded-lg px-3 py-2 text-white text-sm outline-none focus:border-red-700/50 transition"
+                        className="w-full bg-[#1a1a1a] border border-white/8 rounded-lg px-2 sm:px-3 py-2 text-white text-xs sm:text-sm outline-none focus:border-red-700/50 transition"
                       />
                     </div>
                   </div>
@@ -152,7 +169,7 @@ export default function ActivityPage() {
                       placeholder="Any additional details…"
                       value={form.note}
                       onChange={e => setForm({ ...form, note: e.target.value })}
-                      className="w-full bg-[#1a1a1a] border border-white/8 rounded-lg px-3 py-2 text-white placeholder-gray-700 text-sm outline-none focus:border-red-700/50 transition resize-none"
+                      className="w-full bg-[#1a1a1a] border border-white/8 rounded-lg px-2 sm:px-3 py-2 text-white placeholder-gray-700 text-xs sm:text-sm outline-none focus:border-red-700/50 transition resize-none"
                     />
                   </div>
 
@@ -166,23 +183,23 @@ export default function ActivityPage() {
               </div>
 
               {/* History */}
-              <div className="bg-[#111] border border-white/5 rounded-xl p-5">
-                <h3 className="text-white font-black text-base mb-4">
+              <div className="bg-[#111] border border-white/5 rounded-xl p-4 sm:p-5">
+                <h3 className="text-white font-black text-sm sm:text-base mb-3 sm:mb-4">
                   {user?.role === "admin" ? "All Activity" : "My Activity Log"}
                 </h3>
                 {loading ? (
-                  <div className="space-y-2">{[...Array(6)].map((_, i) => <div key={i} className="h-12 bg-white/5 rounded animate-pulse" />)}</div>
+                  <div className="space-y-2">{[...Array(6)].map((_, i) => <div key={i} className="h-10 sm:h-12 bg-white/5 rounded animate-pulse" />)}</div>
                 ) : logs.length === 0 ? (
                   <p className="text-gray-600 text-sm text-center py-8">No activity logged yet.</p>
                 ) : (
-                  <div className="space-y-2 overflow-y-auto max-h-[500px] pr-1">
+                  <div className="space-y-2 overflow-y-auto max-h-[400px] sm:max-h-[500px] pr-1">
                     {logs.map((log: any) => (
-                      <div key={log._id} className="flex items-start gap-3 p-2.5 bg-white/3 rounded-lg border border-white/5">
-                        <span className={`text-xs font-bold px-2 py-1 rounded-full border shrink-0 ${TYPE_STYLES[log.type] || TYPE_STYLES.note}`}>
+                      <div key={log._id} className="flex items-start gap-2 sm:gap-3 p-2 sm:p-2.5 bg-white/3 rounded-lg border border-white/5">
+                        <span className={`text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full border shrink-0 ${TYPE_STYLES[log.type] || TYPE_STYLES.note}`}>
                           {log.type}
                         </span>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
+                          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                             {user?.role === "admin" && (
                               <span className="text-gray-400 text-xs font-semibold">{log.agentName}</span>
                             )}
