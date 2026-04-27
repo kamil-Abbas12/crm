@@ -110,9 +110,8 @@ const LeadSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-LeadSchema.pre("save", function (next) {
+LeadSchema.pre("save", async function () {
   this.updatedAt = new Date();
-  next();
 });
 
 export default mongoose.models.Lead || mongoose.model("Lead", LeadSchema);
