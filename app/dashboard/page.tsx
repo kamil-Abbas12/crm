@@ -20,7 +20,7 @@ const STATUS_STYLES: Record<string, string> = {
 };
 
 export default function DashboardPage() {
-  const user = useAuth();
+  const { user } = useAuth();
   const [stats, setStats] = useState<any>(null);
   const [leads, setLeads] = useState<any[]>([]);
   const [activities, setActivities] = useState<any[]>([]);
