@@ -25,22 +25,36 @@ const TYPE_STYLES: Record<string, string> = {
 };
 
 export default function ActivityPage() {
-  const user = useAuth();
-  const [form, setForm] = useState({ type: "call", vertical: "", count: 1, note: "" });
+  // ✅ FIXED HERE
+  const { user, loading: authLoading } = useAuth();
+
+  const [form, setForm] = useState({
+    type: "call",
+    vertical: "",
+    count: 1,
+    note: "",
+  });
+
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const fetchLogs = () => {
-    api.get("/api/activity").then(r => setLogs(r.data)).finally(() => setLoading(false));
+    api
+      .get("/api/activity")
+      .then((r) => setLogs(r.data))
+      .finally(() => setLoading(false));
   };
 
-  useEffect(() => { fetchLogs(); }, []);
+  useEffect(() => {
+    fetchLogs();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+
     try {
       await api.post("/api/activity", form);
       setSuccess(true);
@@ -54,168 +68,117 @@ export default function ActivityPage() {
     }
   };
 
-  // Compute today's totals
+  // 📊 Today's stats
   const today = new Date().toDateString();
-  const todayLogs = logs.filter(l => new Date(l.date).toDateString() === today);
-  const todayCalls = todayLogs.filter(l => l.type === "call").reduce((s, l) => s + l.count, 0);
-  const todayLeads = todayLogs.filter(l => l.type === "lead").reduce((s, l) => s + l.count, 0);
-  const todayTransfers = todayLogs.filter(l => l.type === "transfer").reduce((s, l) => s + l.count, 0);
-  const todayConversions = todayLogs.filter(l => l.type === "conversion").reduce((s, l) => s + l.count, 0);
+  const todayLogs = logs.filter(
+    (l) => new Date(l.date).toDateString() === today
+  );
+
+  const todayCalls = todayLogs
+    .filter((l) => l.type === "call")
+    .reduce((s, l) => s + l.count, 0);
+
+  const todayLeads = todayLogs
+    .filter((l) => l.type === "lead")
+    .reduce((s, l) => s + l.count, 0);
+
+  const todayTransfers = todayLogs
+    .filter((l) => l.type === "transfer")
+    .reduce((s, l) => s + l.count, 0);
+
+  const todayConversions = todayLogs
+    .filter((l) => l.type === "conversion")
+    .reduce((s, l) => s + l.count, 0);
 
   return (
     <div className="flex min-h-screen bg-[#0a0a0a]">
       <Sidebar />
+
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         <Topbar title="Log Activity" />
+
         <main className="flex-1 overflow-y-auto p-3 sm:p-5">
           <div className="max-w-5xl mx-auto space-y-3 sm:space-y-5">
 
-            {/* Today summary */}
+            {/* Summary */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
               {[
                 { label: "Calls", value: todayCalls, icon: "📞", color: "text-orange-400" },
                 { label: "Leads", value: todayLeads, icon: "🎯", color: "text-red-400" },
                 { label: "Transfers", value: todayTransfers, icon: "🔄", color: "text-blue-400" },
                 { label: "Conversions", value: todayConversions, icon: "✅", color: "text-green-400" },
-              ].map(s => (
-                <div key={s.label} className="bg-[#111] border border-white/5 rounded-xl p-3 sm:p-4 text-center">
-                  <p className="text-lg sm:text-xl">{s.icon}</p>
-                  <p className={`text-xl sm:text-2xl font-black ${s.color} tabular-nums`}>{s.value}</p>
-                  <p className="text-gray-600 text-[10px] sm:text-xs mt-0.5">{s.label} today</p>
+              ].map((s) => (
+                <div key={s.label} className="bg-[#111] border border-white/5 rounded-xl p-3 text-center">
+                  <p>{s.icon}</p>
+                  <p className={`text-xl font-black ${s.color}`}>{s.value}</p>
+                  <p className="text-gray-600 text-xs">{s.label}</p>
                 </div>
               ))}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-5">
-              {/* Log form */}
-              <div className="bg-[#111] border border-white/5 rounded-xl p-4 sm:p-5">
-                <h3 className="text-white font-black text-sm sm:text-base mb-3 sm:mb-4">Log New Activity</h3>
+            <div className="grid lg:grid-cols-2 gap-4">
+
+              {/* Form */}
+              <div className="bg-[#111] border border-white/5 rounded-xl p-4">
+                <h3 className="text-white font-bold mb-3">Log Activity</h3>
 
                 {success && (
-                  <div className="mb-3 sm:mb-4 p-3 bg-green-950/60 border border-green-800/40 rounded-lg text-green-400 text-xs sm:text-sm flex items-center gap-2">
-                    ✅ Activity logged successfully!
+                  <div className="mb-3 text-green-400 text-sm">
+                    ✅ Activity logged!
                   </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
-                  {/* Type */}
-                  <div>
-                    <label className="block text-gray-500 text-xs font-bold tracking-widest uppercase mb-2">Activity Type</label>
-                    {/* Mobile: horizontal scrollable chips; Desktop: vertical list */}
-                    <div className="flex gap-2 overflow-x-auto pb-1 sm:hidden">
-                      {TYPES.map(t => (
-                        <button
-                          key={t.value} type="button"
-                          onClick={() => setForm({ ...form, type: t.value })}
-                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-left transition shrink-0 ${
-                            form.type === t.value
-                              ? "bg-red-600/15 border-red-700/50 text-white"
-                              : "bg-white/3 border-white/8 text-gray-500"
-                          }`}
-                        >
-                          <span className="text-sm">{t.label.split(" ")[0]}</span>
-                          <span className="text-xs font-semibold whitespace-nowrap">{t.label.split(" ").slice(1).join(" ")}</span>
-                        </button>
-                      ))}
-                    </div>
-                    <div className="hidden sm:grid grid-cols-1 gap-1.5">
-                      {TYPES.map(t => (
-                        <button
-                          key={t.value} type="button"
-                          onClick={() => setForm({ ...form, type: t.value })}
-                          className={`flex items-center gap-3 p-2.5 rounded-lg border text-left transition ${
-                            form.type === t.value
-                              ? "bg-red-600/15 border-red-700/50 text-white"
-                              : "bg-white/3 border-white/8 text-gray-500 hover:border-white/20"
-                          }`}
-                        >
-                          <span className="text-base w-5 text-center">{t.label.split(" ")[0]}</span>
-                          <div>
-                            <p className="text-sm font-semibold leading-tight">{t.label.split(" ").slice(1).join(" ")}</p>
-                            <p className="text-xs text-gray-600 mt-0.5">{t.desc}</p>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                    <div>
-                      <label className="block text-gray-500 text-xs font-bold tracking-widest uppercase mb-1.5">Vertical</label>
-                      <select
-                        value={form.vertical}
-                        onChange={e => setForm({ ...form, vertical: e.target.value })}
-                        className="w-full bg-[#1a1a1a] border border-white/8 rounded-lg px-2 sm:px-3 py-2 text-white text-xs sm:text-sm outline-none focus:border-red-700/50 transition"
-                      >
-                        <option value="">All verticals</option>
-                        {VERTICALS.map(v => <option key={v} value={v}>{v}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-gray-500 text-xs font-bold tracking-widest uppercase mb-1.5">Count</label>
-                      <input
-                        type="number" min="1" max="999"
-                        value={form.count}
-                        onChange={e => setForm({ ...form, count: parseInt(e.target.value) || 1 })}
-                        className="w-full bg-[#1a1a1a] border border-white/8 rounded-lg px-2 sm:px-3 py-2 text-white text-xs sm:text-sm outline-none focus:border-red-700/50 transition"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-500 text-xs font-bold tracking-widest uppercase mb-1.5">Note (optional)</label>
-                    <textarea
-                      rows={3}
-                      placeholder="Any additional details…"
-                      value={form.note}
-                      onChange={e => setForm({ ...form, note: e.target.value })}
-                      className="w-full bg-[#1a1a1a] border border-white/8 rounded-lg px-2 sm:px-3 py-2 text-white placeholder-gray-700 text-xs sm:text-sm outline-none focus:border-red-700/50 transition resize-none"
-                    />
-                  </div>
-
-                  <button
-                    type="submit" disabled={saving}
-                    className="w-full bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white font-black py-2.5 rounded-lg transition text-sm shadow-lg shadow-red-900/30"
+                <form onSubmit={handleSubmit} className="space-y-3">
+                  <select
+                    value={form.type}
+                    onChange={(e) =>
+                      setForm({ ...form, type: e.target.value })
+                    }
+                    className="w-full bg-[#1a1a1a] text-white p-2 rounded"
                   >
-                    {saving ? "Logging…" : "Log Activity →"}
+                    {TYPES.map((t) => (
+                      <option key={t.value} value={t.value}>
+                        {t.label}
+                      </option>
+                    ))}
+                  </select>
+
+                  <input
+                    type="number"
+                    value={form.count}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        count: parseInt(e.target.value) || 1,
+                      })
+                    }
+                    className="w-full bg-[#1a1a1a] text-white p-2 rounded"
+                  />
+
+                  <button className="w-full bg-red-600 p-2 rounded text-white">
+                    {saving ? "Saving..." : "Submit"}
                   </button>
                 </form>
               </div>
 
-              {/* History */}
-              <div className="bg-[#111] border border-white/5 rounded-xl p-4 sm:p-5">
-                <h3 className="text-white font-black text-sm sm:text-base mb-3 sm:mb-4">
-                  {user?.role === "admin" ? "All Activity" : "My Activity Log"}
+              {/* Logs */}
+              <div className="bg-[#111] border border-white/5 rounded-xl p-4">
+                <h3 className="text-white font-bold mb-3">
+                  {user?.role === "admin"
+                    ? "All Activity"
+                    : "My Activity Log"}
                 </h3>
+
                 {loading ? (
-                  <div className="space-y-2">{[...Array(6)].map((_, i) => <div key={i} className="h-10 sm:h-12 bg-white/5 rounded animate-pulse" />)}</div>
+                  <p className="text-gray-500">Loading...</p>
                 ) : logs.length === 0 ? (
-                  <p className="text-gray-600 text-sm text-center py-8">No activity logged yet.</p>
+                  <p className="text-gray-500">No logs</p>
                 ) : (
-                  <div className="space-y-2 overflow-y-auto max-h-[400px] sm:max-h-[500px] pr-1">
-                    {logs.map((log: any) => (
-                      <div key={log._id} className="flex items-start gap-2 sm:gap-3 p-2 sm:p-2.5 bg-white/3 rounded-lg border border-white/5">
-                        <span className={`text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full border shrink-0 ${TYPE_STYLES[log.type] || TYPE_STYLES.note}`}>
-                          {log.type}
-                        </span>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-                            {user?.role === "admin" && (
-                              <span className="text-gray-400 text-xs font-semibold">{log.agentName}</span>
-                            )}
-                            {log.vertical && <span className="text-gray-600 text-xs">· {log.vertical}</span>}
-                            {log.count > 1 && (
-                              <span className="text-xs text-white font-bold bg-white/10 px-1.5 py-0.5 rounded">×{log.count}</span>
-                            )}
-                          </div>
-                          {log.note && <p className="text-gray-500 text-xs mt-0.5 truncate">{log.note}</p>}
-                          <p className="text-gray-700 text-[10px] mt-0.5">
-                            {new Date(log.date).toLocaleDateString()} {new Date(log.date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  logs.map((log) => (
+                    <div key={log._id} className="text-sm text-white mb-2">
+                      {log.type} × {log.count}
+                    </div>
+                  ))
                 )}
               </div>
             </div>
