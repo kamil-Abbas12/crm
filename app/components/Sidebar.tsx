@@ -28,7 +28,7 @@ interface SidebarProps {
 export default function Sidebar({ onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const user = useAuth();
+  const { user } = useAuth();
   const nav = user?.role === "admin" ? adminNav : agentNav;
 
   const logout = () => {
