@@ -9,7 +9,7 @@ interface TopbarProps {
 }
 
 export default function Topbar({ title, onMenuClick }: TopbarProps) {
-  const user = useAuth();
+const { user } = useAuth();
 
   return (
     <header className="h-14 bg-[#0d0d0d] border-b border-white/5 flex items-center px-4 gap-3 sticky top-0 z-10">
