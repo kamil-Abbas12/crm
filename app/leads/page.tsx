@@ -92,7 +92,7 @@ const SOURCES = [
 ];
 
 export default function LeadsPage() {
-  const user = useAuth() as User;
+  const { user, loading: authLoading } = useAuth();
 
   const [mounted, setMounted] = useState(false);
   const [leads, setLeads] = useState<Lead[]>([]);
