@@ -7,54 +7,26 @@ import Sidebar from "../../components/Sidebar";
 import Topbar from "../../components/Topbar";
 
 const VERTICALS = [
-  "Medicare",
-  "Final Expense",
-  "ACA / Health",
-  "Auto Insurance",
-  "Solar",
-  "Mortgage Protection",
-  "Life Insurance",
-  "Annuity",
-  "Other",
+  "Medicare","Final Expense","ACA / Health","Auto Insurance",
+  "Solar","Mortgage Protection","Life Insurance","Annuity","Other",
 ];
 
 const LEAD_SOURCES = [
-  "Live Transfer",
-  "Inbound Call",
-  "Direct Mail",
-  "Facebook",
-  "Google",
-  "Referral",
-  "Cold Call",
-  "TV Ad",
-  "Door Knock",
-  "Other",
+  "Live Transfer","Inbound Call","Direct Mail","Facebook","Google",
+  "Referral","Cold Call","TV Ad","Door Knock","Other",
 ];
 
-const LEAD_TYPES = ["Exclusive", "Shared", "Aged", "Real-Time", "T65"];
+const LEAD_TYPES = ["Exclusive","Shared","Aged","Real-Time","T65"];
 
 const STATUSES = [
-  "new",
-  "contacted",
-  "qualified",
-  "callback",
-  "appointment_set",
-  "applied",
-  "converted",
-  "not_interested",
-  "do_not_call",
-  "lost",
+  "new","contacted","qualified","callback","appointment_set",
+  "applied","converted","not_interested","do_not_call","lost",
 ];
 
-const DISPOSITIONS = ["hot", "warm", "cold"];
+const DISPOSITIONS = ["hot","warm","cold"];
 
 const CALL_OUTCOMES = [
-  "answered",
-  "no_answer",
-  "voicemail",
-  "busy",
-  "wrong_number",
-  "callback_scheduled",
+  "answered","no_answer","voicemail","busy","wrong_number","callback_scheduled",
 ];
 
 const US_STATES = [
@@ -65,34 +37,13 @@ const US_STATES = [
 ];
 
 const VERTICAL_SUBTYPES: Record<string, string[]> = {
-  Medicare: [
-    "Medicare Advantage (MAPD)",
-    "Medicare Supplement (Medigap)",
-    "Part D (PDP)",
-    "Medicare + Dental/Vision",
-    "T65 Prospect",
-  ],
-  "Final Expense": [
-    "Whole Life",
-    "Graded Benefit",
-    "Guaranteed Issue",
-    "Term Life",
-  ],
-  "ACA / Health": [
-    "ACA Marketplace",
-    "Short Term Health",
-    "Group Health",
-    "Dental/Vision",
-  ],
-  "Auto Insurance": [
-    "Personal Auto",
-    "SR-22",
-    "Commercial Auto",
-    "Motorcycle",
-  ],
-  Solar: ["Residential Solar", "Commercial Solar", "Battery Storage"],
-  "Life Insurance": ["Term", "Whole Life", "IUL", "GUL"],
-  Annuity: ["FIA", "MYGA", "SPIA"],
+  Medicare: ["Medicare Advantage (MAPD)","Medicare Supplement (Medigap)","Part D (PDP)","Medicare + Dental/Vision","T65 Prospect"],
+  "Final Expense": ["Whole Life","Graded Benefit","Guaranteed Issue","Term Life"],
+  "ACA / Health": ["ACA Marketplace","Short Term Health","Group Health","Dental/Vision"],
+  "Auto Insurance": ["Personal Auto","SR-22","Commercial Auto","Motorcycle"],
+  Solar: ["Residential Solar","Commercial Solar","Battery Storage"],
+  "Life Insurance": ["Term","Whole Life","IUL","GUL"],
+  Annuity: ["FIA","MYGA","SPIA"],
 };
 
 type Tab = "contact" | "lead" | "calls" | "vertical" | "notes";
@@ -111,68 +62,21 @@ export default function NewLeadPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [callLog, setCallLog] = useState({
-    outcome: "answered",
-    duration: "",
-    note: "",
-  });
+  const [callLog, setCallLog] = useState({ outcome: "answered", duration: "", note: "" });
 
   const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    phone2: "",
-    email: "",
-    dob: "",
-    gender: "",
-    state: "",
-    zipCode: "",
-    county: "",
-    language: "English",
-
-    vertical: "",
-    subType: "",
-    leadSource: "",
-    leadType: "",
-    status: "new",
-    disposition: "",
-    priority: "",
-    agent: "",
-
-    callCount: 0,
-    callsAnswered: 0,
-    callsNoAnswer: 0,
-    callsVoicemail: 0,
-    bestTimeToCall: "",
-    nextCallDate: "",
-    callLogs: [] as CallLog[],
-
-    medicareNumber: "",
-    medicarePartA: "",
-    medicarePartB: "",
-    currentPlan: "",
-    tobaccoUser: false,
-    t65Date: "",
-
-    coverageAmount: "",
-    currentCoverage: "",
-    healthConditions: "",
-
-    householdSize: "",
-    annualIncome: "",
-    currentlyInsured: false,
-    enrollmentPeriod: "",
-
-    vehicleYear: "",
-    vehicleMake: "",
-    vehicleModel: "",
-    currentInsurer: "",
-    currentPremium: "",
-
-    homeOwner: false,
-    monthlyElectricBill: "",
-    roofAge: "",
-    creditScore: "",
-
+    name: "", phone: "", phone2: "", email: "", dob: "", gender: "",
+    state: "", zipCode: "", county: "", language: "English",
+    vertical: "", subType: "", leadSource: "", leadType: "",
+    status: "new", disposition: "", priority: "", agent: "",
+    callCount: 0, callsAnswered: 0, callsNoAnswer: 0, callsVoicemail: 0,
+    bestTimeToCall: "", nextCallDate: "", callLogs: [] as CallLog[],
+    medicareNumber: "", medicarePartA: "", medicarePartB: "",
+    currentPlan: "", tobaccoUser: false, t65Date: "",
+    coverageAmount: "", currentCoverage: "", healthConditions: "",
+    householdSize: "", annualIncome: "", currentlyInsured: false, enrollmentPeriod: "",
+    vehicleYear: "", vehicleMake: "", vehicleModel: "", currentInsurer: "", currentPremium: "",
+    homeOwner: false, monthlyElectricBill: "", roofAge: "", creditScore: "",
     notes: "",
   });
 
@@ -181,18 +85,15 @@ export default function NewLeadPage() {
 
   const addCallLog = () => {
     if (!callLog.outcome) return;
-
     const log: CallLog = {
       date: new Date().toISOString(),
       outcome: callLog.outcome,
       duration: callLog.duration ? parseInt(callLog.duration, 10) : undefined,
       note: callLog.note,
     };
-
     const answered = callLog.outcome === "answered" ? 1 : 0;
     const noAnswer = callLog.outcome === "no_answer" ? 1 : 0;
     const voicemail = callLog.outcome === "voicemail" ? 1 : 0;
-
     setForm((prev) => ({
       ...prev,
       callLogs: [...prev.callLogs, log],
@@ -201,7 +102,6 @@ export default function NewLeadPage() {
       callsNoAnswer: prev.callsNoAnswer + noAnswer,
       callsVoicemail: prev.callsVoicemail + voicemail,
     }));
-
     setCallLog({ outcome: "answered", duration: "", note: "" });
   };
 
@@ -210,10 +110,8 @@ export default function NewLeadPage() {
       setError("Name and phone are required");
       return;
     }
-
     setLoading(true);
     setError("");
-
     try {
       await api.post("/api/leads", form);
       router.push("/leads");
@@ -225,35 +123,32 @@ export default function NewLeadPage() {
   };
 
   const tabs: { key: Tab; label: string; icon: string }[] = [
-    { key: "contact", label: "Contact", icon: "👤" },
-    { key: "lead", label: "Lead Info", icon: "🎯" },
-    { key: "calls", label: "Call Log", icon: "📞" },
-    { key: "vertical", label: "Vertical Details", icon: "📋" },
-    { key: "notes", label: "Notes", icon: "📝" },
+    { key: "contact",  label: "Contact",          icon: "👤" },
+    { key: "lead",     label: "Lead Info",         icon: "🎯" },
+    { key: "calls",    label: "Call Log",          icon: "📞" },
+    { key: "vertical", label: "Vertical Details",  icon: "📋" },
+    { key: "notes",    label: "Notes",             icon: "📝" },
   ];
 
+  // Navy dark theme — matches dashboard
   const inputCls =
-    "w-full rounded-lg border border-white/8 bg-[#1a1a1a] px-3 py-2.5 text-sm text-white placeholder:text-gray-700 outline-none transition focus:border-red-700/50";
+    "w-full rounded-lg border border-[#1e3a5f]/50 bg-[#060d1a] px-3 py-2.5 text-sm text-white placeholder:text-[#3a5a8a] outline-none transition focus:border-[#00b4ff]/60";
 
   const selectCls =
-    "w-full rounded-lg border border-white/8 bg-[#1a1a1a] px-3 py-2.5 text-sm text-white outline-none transition focus:border-red-700/50";
+    "w-full rounded-lg border border-[#1e3a5f]/50 bg-[#060d1a] px-3 py-2.5 text-sm text-[#8ab4d4] outline-none transition focus:border-[#00b4ff]/60";
 
   const labelCls =
-    "mb-1.5 block text-[10px] font-bold uppercase tracking-widest text-gray-500";
+    "mb-1.5 block text-[10px] font-bold uppercase tracking-widest text-[#4a7aaa]";
 
   const gridCls = "grid grid-cols-1 gap-4 md:grid-cols-2";
 
   const OUTCOME_ICONS: Record<string, string> = {
-    answered: "✅",
-    no_answer: "📵",
-    voicemail: "📬",
-    busy: "🔴",
-    wrong_number: "❌",
-    callback_scheduled: "📅",
+    answered: "✅", no_answer: "📵", voicemail: "📬",
+    busy: "🔴", wrong_number: "❌", callback_scheduled: "📅",
   };
 
   return (
-    <div className="flex min-h-screen w-full overflow-x-hidden bg-[#0a0a0a]">
+    <div className="flex min-h-screen w-full overflow-x-hidden bg-[#060d1a]">
       <Sidebar />
 
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
@@ -261,13 +156,12 @@ export default function NewLeadPage() {
 
         <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 sm:p-4 lg:p-5">
           <div className="mx-auto w-full max-w-5xl">
+
             {/* Header */}
-            <div className="mb-5 flex flex-col gap-4 rounded-xl border border-white/5 bg-[#111] p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="mb-5 flex flex-col gap-4 rounded-xl border border-[#1e3a5f]/40 bg-[#0a0f1e] p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between">
               <div className="min-w-0">
-                <h2 className="text-xl font-black text-white sm:text-2xl">
-                  New Lead
-                </h2>
-                <p className="mt-1 text-sm text-gray-600">
+                <h2 className="text-xl font-black text-white sm:text-2xl">New Lead</h2>
+                <p className="mt-1 text-sm text-[#4a7aaa]">
                   Fill in as much detail as possible for better tracking
                 </p>
               </div>
@@ -275,15 +169,14 @@ export default function NewLeadPage() {
               <div className="flex flex-col gap-2 sm:flex-row">
                 <button
                   onClick={() => router.back()}
-                  className="rounded-lg border border-white/8 bg-white/5 px-4 py-2 text-sm font-semibold text-gray-400 transition hover:bg-white/10"
+                  className="rounded-lg border border-[#1e3a5f]/50 bg-[#1e3a5f]/10 px-4 py-2 text-sm font-semibold text-[#8ab4d4] transition hover:bg-[#1e3a5f]/20"
                 >
                   Cancel
                 </button>
-
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="rounded-lg bg-red-600 px-5 py-2 text-sm font-black text-white shadow-lg shadow-red-900/30 transition hover:bg-red-500 disabled:opacity-50"
+                  className="rounded-lg bg-[#0066cc] px-5 py-2 text-sm font-black text-white shadow-lg shadow-[#0066cc]/30 transition hover:bg-[#0080ff] disabled:opacity-50"
                 >
                   {loading ? "Saving…" : "Save Lead →"}
                 </button>
@@ -297,7 +190,7 @@ export default function NewLeadPage() {
             )}
 
             {/* Tabs */}
-            <div className="mb-5 overflow-x-auto rounded-xl border border-white/5 bg-[#111] p-1">
+            <div className="mb-5 overflow-x-auto rounded-xl border border-[#1e3a5f]/40 bg-[#0a0f1e] p-1">
               <div className="flex min-w-max gap-1">
                 {tabs.map((t) => (
                   <button
@@ -305,8 +198,8 @@ export default function NewLeadPage() {
                     onClick={() => setTab(t.key)}
                     className={`flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold transition sm:flex-1 ${
                       tab === t.key
-                        ? "border border-red-800/30 bg-red-600/20 text-red-400"
-                        : "text-gray-600 hover:text-gray-300"
+                        ? "border border-[#0066cc]/50 bg-[#0066cc]/20 text-[#00b4ff]"
+                        : "text-[#4a7aaa] hover:text-[#8ab4d4]"
                     }`}
                   >
                     <span>{t.icon}</span>
@@ -316,124 +209,63 @@ export default function NewLeadPage() {
               </div>
             </div>
 
-            {/* Content */}
-            <div className="rounded-xl border border-white/5 bg-[#111] p-4 sm:p-5">
+            {/* Content panel */}
+            <div className="rounded-xl border border-[#1e3a5f]/40 bg-[#0a0f1e] p-4 sm:p-5">
+
               {/* CONTACT */}
               {tab === "contact" && (
                 <div className="space-y-4">
-                  <h3 className="border-b border-white/5 pb-3 text-sm font-black text-white">
+                  <h3 className="border-b border-[#1e3a5f]/40 pb-3 text-sm font-black text-white">
                     Contact Information
                   </h3>
-
                   <div className={gridCls}>
                     <div>
                       <label className={labelCls}>Full Name *</label>
-                      <input
-                        className={inputCls}
-                        placeholder="John Smith"
-                        value={form.name}
-                        onChange={(e) => set("name", e.target.value)}
-                      />
+                      <input className={inputCls} placeholder="John Smith" value={form.name} onChange={(e) => set("name", e.target.value)} />
                     </div>
-
                     <div>
                       <label className={labelCls}>Primary Phone *</label>
-                      <input
-                        className={inputCls}
-                        placeholder="(555) 000-0000"
-                        value={form.phone}
-                        onChange={(e) => set("phone", e.target.value)}
-                      />
+                      <input className={inputCls} placeholder="(555) 000-0000" value={form.phone} onChange={(e) => set("phone", e.target.value)} />
                     </div>
-
                     <div>
                       <label className={labelCls}>Secondary Phone</label>
-                      <input
-                        className={inputCls}
-                        placeholder="(555) 000-0001"
-                        value={form.phone2}
-                        onChange={(e) => set("phone2", e.target.value)}
-                      />
+                      <input className={inputCls} placeholder="(555) 000-0001" value={form.phone2} onChange={(e) => set("phone2", e.target.value)} />
                     </div>
-
                     <div>
                       <label className={labelCls}>Email</label>
-                      <input
-                        type="email"
-                        className={inputCls}
-                        placeholder="john@email.com"
-                        value={form.email}
-                        onChange={(e) => set("email", e.target.value)}
-                      />
+                      <input type="email" className={inputCls} placeholder="john@email.com" value={form.email} onChange={(e) => set("email", e.target.value)} />
                     </div>
-
                     <div>
                       <label className={labelCls}>Date of Birth</label>
-                      <input
-                        type="date"
-                        className={inputCls}
-                        value={form.dob}
-                        onChange={(e) => set("dob", e.target.value)}
-                      />
+                      <input type="date" className={inputCls} value={form.dob} onChange={(e) => set("dob", e.target.value)} />
                     </div>
-
                     <div>
                       <label className={labelCls}>Gender</label>
-                      <select
-                        className={selectCls}
-                        value={form.gender}
-                        onChange={(e) => set("gender", e.target.value)}
-                      >
+                      <select className={selectCls} value={form.gender} onChange={(e) => set("gender", e.target.value)}>
                         <option value="">Select…</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                         <option value="other">Other</option>
                       </select>
                     </div>
-
                     <div>
                       <label className={labelCls}>State</label>
-                      <select
-                        className={selectCls}
-                        value={form.state}
-                        onChange={(e) => set("state", e.target.value)}
-                      >
+                      <select className={selectCls} value={form.state} onChange={(e) => set("state", e.target.value)}>
                         <option value="">Select state…</option>
-                        {US_STATES.map((s) => (
-                          <option key={s} value={s}>
-                            {s}
-                          </option>
-                        ))}
+                        {US_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
                       </select>
                     </div>
-
                     <div>
                       <label className={labelCls}>Zip Code</label>
-                      <input
-                        className={inputCls}
-                        placeholder="75001"
-                        value={form.zipCode}
-                        onChange={(e) => set("zipCode", e.target.value)}
-                      />
+                      <input className={inputCls} placeholder="75001" value={form.zipCode} onChange={(e) => set("zipCode", e.target.value)} />
                     </div>
-
                     <div>
                       <label className={labelCls}>County</label>
-                      <input
-                        className={inputCls}
-                        placeholder="Dallas County"
-                        value={form.county}
-                        onChange={(e) => set("county", e.target.value)}
-                      />
+                      <input className={inputCls} placeholder="Dallas County" value={form.county} onChange={(e) => set("county", e.target.value)} />
                     </div>
-
                     <div>
                       <label className={labelCls}>Language</label>
-                      <select
-                        className={selectCls}
-                        value={form.language}
-                        onChange={(e) => set("language", e.target.value)}
-                      >
+                      <select className={selectCls} value={form.language} onChange={(e) => set("language", e.target.value)}>
                         <option value="English">English</option>
                         <option value="Spanish">Spanish</option>
                         <option value="Other">Other</option>
@@ -446,87 +278,46 @@ export default function NewLeadPage() {
               {/* LEAD INFO */}
               {tab === "lead" && (
                 <div className="space-y-4">
-                  <h3 className="border-b border-white/5 pb-3 text-sm font-black text-white">
+                  <h3 className="border-b border-[#1e3a5f]/40 pb-3 text-sm font-black text-white">
                     Lead Classification
                   </h3>
-
                   <div className={gridCls}>
                     <div>
                       <label className={labelCls}>Vertical *</label>
-                      <select
-                        className={selectCls}
-                        value={form.vertical}
-                        onChange={(e) => {
-                          set("vertical", e.target.value);
-                          set("subType", "");
-                        }}
-                      >
+                      <select className={selectCls} value={form.vertical} onChange={(e) => { set("vertical", e.target.value); set("subType", ""); }}>
                         <option value="">Select vertical…</option>
-                        {VERTICALS.map((v) => (
-                          <option key={v}>{v}</option>
-                        ))}
+                        {VERTICALS.map((v) => <option key={v}>{v}</option>)}
                       </select>
                     </div>
-
                     {form.vertical && VERTICAL_SUBTYPES[form.vertical] && (
                       <div>
                         <label className={labelCls}>Sub-Type</label>
-                        <select
-                          className={selectCls}
-                          value={form.subType}
-                          onChange={(e) => set("subType", e.target.value)}
-                        >
+                        <select className={selectCls} value={form.subType} onChange={(e) => set("subType", e.target.value)}>
                           <option value="">Select sub-type…</option>
-                          {VERTICAL_SUBTYPES[form.vertical].map((s) => (
-                            <option key={s}>{s}</option>
-                          ))}
+                          {VERTICAL_SUBTYPES[form.vertical].map((s) => <option key={s}>{s}</option>)}
                         </select>
                       </div>
                     )}
-
                     <div>
                       <label className={labelCls}>Lead Source</label>
-                      <select
-                        className={selectCls}
-                        value={form.leadSource}
-                        onChange={(e) => set("leadSource", e.target.value)}
-                      >
+                      <select className={selectCls} value={form.leadSource} onChange={(e) => set("leadSource", e.target.value)}>
                         <option value="">Select source…</option>
-                        {LEAD_SOURCES.map((s) => (
-                          <option key={s}>{s}</option>
-                        ))}
+                        {LEAD_SOURCES.map((s) => <option key={s}>{s}</option>)}
                       </select>
                     </div>
-
                     <div>
                       <label className={labelCls}>Lead Type</label>
-                      <select
-                        className={selectCls}
-                        value={form.leadType}
-                        onChange={(e) => set("leadType", e.target.value)}
-                      >
+                      <select className={selectCls} value={form.leadType} onChange={(e) => set("leadType", e.target.value)}>
                         <option value="">Select type…</option>
-                        {LEAD_TYPES.map((t) => (
-                          <option key={t}>{t}</option>
-                        ))}
+                        {LEAD_TYPES.map((t) => <option key={t}>{t}</option>)}
                       </select>
                     </div>
-
                     <div>
                       <label className={labelCls}>Status</label>
-                      <select
-                        className={selectCls}
-                        value={form.status}
-                        onChange={(e) => set("status", e.target.value)}
-                      >
-                        {STATUSES.map((s) => (
-                          <option key={s} value={s}>
-                            {s.replace(/_/g, " ")}
-                          </option>
-                        ))}
+                      <select className={selectCls} value={form.status} onChange={(e) => set("status", e.target.value)}>
+                        {STATUSES.map((s) => <option key={s} value={s}>{s.replace(/_/g, " ")}</option>)}
                       </select>
                     </div>
-
                     <div>
                       <label className={labelCls}>Disposition</label>
                       <div className="grid grid-cols-3 gap-2">
@@ -534,17 +325,15 @@ export default function NewLeadPage() {
                           <button
                             key={d}
                             type="button"
-                            onClick={() =>
-                              set("disposition", form.disposition === d ? "" : d)
-                            }
+                            onClick={() => set("disposition", form.disposition === d ? "" : d)}
                             className={`rounded-lg border py-2 text-xs font-bold capitalize transition ${
                               form.disposition === d
                                 ? d === "hot"
                                   ? "border-red-600/60 bg-red-900/40 text-red-400"
                                   : d === "warm"
                                   ? "border-orange-600/60 bg-orange-900/40 text-orange-400"
-                                  : "border-blue-600/60 bg-blue-900/40 text-blue-400"
-                                : "border-white/8 bg-white/5 text-gray-500"
+                                  : "border-[#0066cc]/60 bg-[#003380]/40 text-[#00b4ff]"
+                                : "border-[#1e3a5f]/50 bg-[#1e3a5f]/10 text-[#4a7aaa]"
                             }`}
                           >
                             {d === "hot" ? "🔥 Hot" : d === "warm" ? "🌡 Warm" : "❄️ Cold"}
@@ -552,11 +341,10 @@ export default function NewLeadPage() {
                         ))}
                       </div>
                     </div>
-
                     <div>
                       <label className={labelCls}>Priority</label>
                       <div className="grid grid-cols-3 gap-2">
-                        {["high", "medium", "low"].map((p) => (
+                        {["high","medium","low"].map((p) => (
                           <button
                             key={p}
                             type="button"
@@ -567,8 +355,8 @@ export default function NewLeadPage() {
                                   ? "border-red-600/60 bg-red-900/40 text-red-400"
                                   : p === "medium"
                                   ? "border-yellow-600/60 bg-yellow-900/40 text-yellow-400"
-                                  : "border-gray-600/60 bg-gray-900/40 text-gray-400"
-                                : "border-white/8 bg-white/5 text-gray-500"
+                                  : "border-[#1e3a5f]/60 bg-[#1e3a5f]/20 text-[#4a7aaa]"
+                                : "border-[#1e3a5f]/50 bg-[#1e3a5f]/10 text-[#4a7aaa]"
                             }`}
                           >
                             {p === "high" ? "⚡ High" : p === "medium" ? "➖ Med" : "▽ Low"}
@@ -576,39 +364,22 @@ export default function NewLeadPage() {
                         ))}
                       </div>
                     </div>
-
                     <div>
                       <label className={labelCls}>Assigned Agent</label>
-                      <input
-                        className={inputCls}
-                        placeholder="Agent name"
-                        value={form.agent}
-                        onChange={(e) => set("agent", e.target.value)}
-                      />
+                      <input className={inputCls} placeholder="Agent name" value={form.agent} onChange={(e) => set("agent", e.target.value)} />
                     </div>
-
                     <div>
                       <label className={labelCls}>Best Time to Call</label>
-                      <select
-                        className={selectCls}
-                        value={form.bestTimeToCall}
-                        onChange={(e) => set("bestTimeToCall", e.target.value)}
-                      >
+                      <select className={selectCls} value={form.bestTimeToCall} onChange={(e) => set("bestTimeToCall", e.target.value)}>
                         <option value="">Any time</option>
                         <option value="morning">Morning (8am–12pm)</option>
                         <option value="afternoon">Afternoon (12pm–5pm)</option>
                         <option value="evening">Evening (5pm–8pm)</option>
                       </select>
                     </div>
-
                     <div>
                       <label className={labelCls}>Schedule Callback</label>
-                      <input
-                        type="datetime-local"
-                        className={inputCls}
-                        value={form.nextCallDate}
-                        onChange={(e) => set("nextCallDate", e.target.value)}
-                      />
+                      <input type="datetime-local" className={inputCls} value={form.nextCallDate} onChange={(e) => set("nextCallDate", e.target.value)} />
                     </div>
                   </div>
                 </div>
@@ -617,91 +388,46 @@ export default function NewLeadPage() {
               {/* CALLS */}
               {tab === "calls" && (
                 <div className="space-y-5">
-                  <h3 className="border-b border-white/5 pb-3 text-sm font-black text-white">
+                  <h3 className="border-b border-[#1e3a5f]/40 pb-3 text-sm font-black text-white">
                     Call Tracking
                   </h3>
-
                   <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
                     {[
-                      { label: "Total Calls", value: form.callCount, color: "text-white" },
-                      {
-                        label: "Answered",
-                        value: form.callsAnswered,
-                        color: "text-green-400",
-                      },
-                      {
-                        label: "No Answer",
-                        value: form.callsNoAnswer,
-                        color: "text-yellow-400",
-                      },
-                      {
-                        label: "Voicemail",
-                        value: form.callsVoicemail,
-                        color: "text-blue-400",
-                      },
+                      { label: "Total Calls", value: form.callCount,      color: "text-white" },
+                      { label: "Answered",    value: form.callsAnswered,  color: "text-green-400" },
+                      { label: "No Answer",   value: form.callsNoAnswer,  color: "text-yellow-400" },
+                      { label: "Voicemail",   value: form.callsVoicemail, color: "text-[#00b4ff]" },
                     ].map((s) => (
-                      <div
-                        key={s.label}
-                        className="rounded-xl border border-white/8 bg-white/5 p-3 text-center"
-                      >
-                        <p className={`text-xl font-black sm:text-2xl ${s.color}`}>
-                          {s.value}
-                        </p>
-                        <p className="mt-0.5 text-[10px] text-gray-600">{s.label}</p>
+                      <div key={s.label} className="rounded-xl border border-[#1e3a5f]/40 bg-[#1e3a5f]/10 p-3 text-center">
+                        <p className={`text-xl font-black sm:text-2xl ${s.color}`}>{s.value}</p>
+                        <p className="mt-0.5 text-[10px] text-[#3a5a8a]">{s.label}</p>
                       </div>
                     ))}
                   </div>
 
-                  <div className="rounded-xl border border-white/8 bg-white/3 p-4">
+                  <div className="rounded-xl border border-[#1e3a5f]/40 bg-[#1e3a5f]/10 p-4">
                     <p className="mb-3 text-sm font-bold text-white">Log a Call</p>
-
                     <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
                       <div>
                         <label className={labelCls}>Outcome</label>
-                        <select
-                          className={selectCls}
-                          value={callLog.outcome}
-                          onChange={(e) =>
-                            setCallLog((c) => ({ ...c, outcome: e.target.value }))
-                          }
-                        >
+                        <select className={selectCls} value={callLog.outcome} onChange={(e) => setCallLog((c) => ({ ...c, outcome: e.target.value }))}>
                           {CALL_OUTCOMES.map((o) => (
-                            <option key={o} value={o}>
-                              {OUTCOME_ICONS[o]} {o.replace(/_/g, " ")}
-                            </option>
+                            <option key={o} value={o}>{OUTCOME_ICONS[o]} {o.replace(/_/g, " ")}</option>
                           ))}
                         </select>
                       </div>
-
                       <div>
                         <label className={labelCls}>Duration (seconds)</label>
-                        <input
-                          type="number"
-                          className={inputCls}
-                          placeholder="e.g. 180"
-                          value={callLog.duration}
-                          onChange={(e) =>
-                            setCallLog((c) => ({ ...c, duration: e.target.value }))
-                          }
-                        />
+                        <input type="number" className={inputCls} placeholder="e.g. 180" value={callLog.duration} onChange={(e) => setCallLog((c) => ({ ...c, duration: e.target.value }))} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Note</label>
-                        <input
-                          className={inputCls}
-                          placeholder="Call notes…"
-                          value={callLog.note}
-                          onChange={(e) =>
-                            setCallLog((c) => ({ ...c, note: e.target.value }))
-                          }
-                        />
+                        <input className={inputCls} placeholder="Call notes…" value={callLog.note} onChange={(e) => setCallLog((c) => ({ ...c, note: e.target.value }))} />
                       </div>
                     </div>
-
                     <button
                       onClick={addCallLog}
-                      className="mt-3 rounded-lg bg-red-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-red-500"
+                      className="mt-3 rounded-lg bg-[#0066cc] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#0080ff]"
                     >
                       + Add Call
                     </button>
@@ -709,37 +435,22 @@ export default function NewLeadPage() {
 
                   {form.callLogs.length > 0 && (
                     <div className="space-y-2">
-                      <p className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                      <p className="text-xs font-bold uppercase tracking-wider text-[#4a7aaa]">
                         Call History
                       </p>
-
                       {form.callLogs.map((log, i) => (
-                        <div
-                          key={i}
-                          className="flex flex-col gap-3 rounded-lg border border-white/5 bg-white/3 p-3 sm:flex-row sm:items-center"
-                        >
+                        <div key={i} className="flex flex-col gap-3 rounded-lg border border-[#1e3a5f]/40 bg-[#1e3a5f]/10 p-3 sm:flex-row sm:items-center">
                           <span className="text-lg">{OUTCOME_ICONS[log.outcome]}</span>
-
                           <div className="min-w-0 flex-1">
-                            <p className="text-sm font-semibold capitalize text-white">
-                              {log.outcome.replace(/_/g, " ")}
-                            </p>
-                            {log.note && (
-                              <p className="break-words text-xs text-gray-500">{log.note}</p>
-                            )}
+                            <p className="text-sm font-semibold capitalize text-white">{log.outcome.replace(/_/g, " ")}</p>
+                            {log.note && <p className="break-words text-xs text-[#4a7aaa]">{log.note}</p>}
                           </div>
-
-                          <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600">
+                          <div className="flex flex-wrap items-center gap-3 text-xs text-[#3a5a8a]">
                             {log.duration != null && (
-                              <span>
-                                {Math.floor(log.duration / 60)}m {log.duration % 60}s
-                              </span>
+                              <span>{Math.floor(log.duration / 60)}m {log.duration % 60}s</span>
                             )}
                             <span>
-                              {new Date(log.date).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}
+                              {new Date(log.date).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                             </span>
                           </div>
                         </div>
@@ -752,12 +463,12 @@ export default function NewLeadPage() {
               {/* VERTICAL DETAILS */}
               {tab === "vertical" && (
                 <div className="space-y-4">
-                  <h3 className="border-b border-white/5 pb-3 text-sm font-black text-white">
+                  <h3 className="border-b border-[#1e3a5f]/40 pb-3 text-sm font-black text-white">
                     {form.vertical || "Vertical"} Details
                   </h3>
 
                   {!form.vertical && (
-                    <p className="py-6 text-center text-sm text-gray-600">
+                    <p className="py-6 text-center text-sm text-[#4a7aaa]">
                       Select a vertical in the Lead Info tab first.
                     </p>
                   )}
@@ -766,65 +477,27 @@ export default function NewLeadPage() {
                     <div className={gridCls}>
                       <div>
                         <label className={labelCls}>Medicare Beneficiary ID</label>
-                        <input
-                          className={inputCls}
-                          placeholder="1EG4-TE5-MK72"
-                          value={form.medicareNumber}
-                          onChange={(e) => set("medicareNumber", e.target.value)}
-                        />
+                        <input className={inputCls} placeholder="1EG4-TE5-MK72" value={form.medicareNumber} onChange={(e) => set("medicareNumber", e.target.value)} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Part A Effective Date</label>
-                        <input
-                          type="date"
-                          className={inputCls}
-                          value={form.medicarePartA}
-                          onChange={(e) => set("medicarePartA", e.target.value)}
-                        />
+                        <input type="date" className={inputCls} value={form.medicarePartA} onChange={(e) => set("medicarePartA", e.target.value)} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Part B Effective Date</label>
-                        <input
-                          type="date"
-                          className={inputCls}
-                          value={form.medicarePartB}
-                          onChange={(e) => set("medicarePartB", e.target.value)}
-                        />
+                        <input type="date" className={inputCls} value={form.medicarePartB} onChange={(e) => set("medicarePartB", e.target.value)} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Current Plan/Carrier</label>
-                        <input
-                          className={inputCls}
-                          placeholder="UnitedHealthcare, Humana…"
-                          value={form.currentPlan}
-                          onChange={(e) => set("currentPlan", e.target.value)}
-                        />
+                        <input className={inputCls} placeholder="UnitedHealthcare, Humana…" value={form.currentPlan} onChange={(e) => set("currentPlan", e.target.value)} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Turns 65 Date (T65)</label>
-                        <input
-                          type="date"
-                          className={inputCls}
-                          value={form.t65Date}
-                          onChange={(e) => set("t65Date", e.target.value)}
-                        />
+                        <input type="date" className={inputCls} value={form.t65Date} onChange={(e) => set("t65Date", e.target.value)} />
                       </div>
-
                       <div className="flex items-center gap-3 pt-4">
-                        <input
-                          type="checkbox"
-                          id="tobacco"
-                          checked={form.tobaccoUser}
-                          onChange={(e) => set("tobaccoUser", e.target.checked)}
-                          className="h-4 w-4 accent-red-500"
-                        />
-                        <label htmlFor="tobacco" className="text-sm text-gray-400">
-                          Tobacco user
-                        </label>
+                        <input type="checkbox" id="tobacco" checked={form.tobaccoUser} onChange={(e) => set("tobaccoUser", e.target.checked)} className="h-4 w-4 accent-[#0066cc]" />
+                        <label htmlFor="tobacco" className="text-sm text-[#8ab4d4]">Tobacco user</label>
                       </div>
                     </div>
                   )}
@@ -833,35 +506,15 @@ export default function NewLeadPage() {
                     <div className={gridCls}>
                       <div>
                         <label className={labelCls}>Desired Coverage Amount ($)</label>
-                        <input
-                          type="number"
-                          className={inputCls}
-                          placeholder="10000"
-                          value={form.coverageAmount}
-                          onChange={(e) => set("coverageAmount", e.target.value)}
-                        />
+                        <input type="number" className={inputCls} placeholder="10000" value={form.coverageAmount} onChange={(e) => set("coverageAmount", e.target.value)} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Current Coverage/Policy</label>
-                        <input
-                          className={inputCls}
-                          placeholder="Existing policy?"
-                          value={form.currentCoverage}
-                          onChange={(e) => set("currentCoverage", e.target.value)}
-                        />
+                        <input className={inputCls} placeholder="Existing policy?" value={form.currentCoverage} onChange={(e) => set("currentCoverage", e.target.value)} />
                       </div>
-
                       <div className="md:col-span-2">
-                        <label className={labelCls}>
-                          Health Conditions (underwriting notes)
-                        </label>
-                        <input
-                          className={inputCls}
-                          placeholder="Diabetes, COPD, etc."
-                          value={form.healthConditions}
-                          onChange={(e) => set("healthConditions", e.target.value)}
-                        />
+                        <label className={labelCls}>Health Conditions (underwriting notes)</label>
+                        <input className={inputCls} placeholder="Diabetes, COPD, etc." value={form.healthConditions} onChange={(e) => set("healthConditions", e.target.value)} />
                       </div>
                     </div>
                   )}
@@ -870,51 +523,24 @@ export default function NewLeadPage() {
                     <div className={gridCls}>
                       <div>
                         <label className={labelCls}>Household Size</label>
-                        <input
-                          type="number"
-                          className={inputCls}
-                          placeholder="3"
-                          value={form.householdSize}
-                          onChange={(e) => set("householdSize", e.target.value)}
-                        />
+                        <input type="number" className={inputCls} placeholder="3" value={form.householdSize} onChange={(e) => set("householdSize", e.target.value)} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Annual Household Income ($)</label>
-                        <input
-                          type="number"
-                          className={inputCls}
-                          placeholder="45000"
-                          value={form.annualIncome}
-                          onChange={(e) => set("annualIncome", e.target.value)}
-                        />
+                        <input type="number" className={inputCls} placeholder="45000" value={form.annualIncome} onChange={(e) => set("annualIncome", e.target.value)} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Enrollment Period</label>
-                        <select
-                          className={selectCls}
-                          value={form.enrollmentPeriod}
-                          onChange={(e) => set("enrollmentPeriod", e.target.value)}
-                        >
+                        <select className={selectCls} value={form.enrollmentPeriod} onChange={(e) => set("enrollmentPeriod", e.target.value)}>
                           <option value="">Select…</option>
                           <option>Open Enrollment (OEP)</option>
                           <option>Special Enrollment (SEP)</option>
                           <option>Annual Enrollment (AEP)</option>
                         </select>
                       </div>
-
                       <div className="flex items-center gap-3 pt-4">
-                        <input
-                          type="checkbox"
-                          id="insured"
-                          checked={form.currentlyInsured}
-                          onChange={(e) => set("currentlyInsured", e.target.checked)}
-                          className="h-4 w-4 accent-red-500"
-                        />
-                        <label htmlFor="insured" className="text-sm text-gray-400">
-                          Currently insured
-                        </label>
+                        <input type="checkbox" id="insured" checked={form.currentlyInsured} onChange={(e) => set("currentlyInsured", e.target.checked)} className="h-4 w-4 accent-[#0066cc]" />
+                        <label htmlFor="insured" className="text-sm text-[#8ab4d4]">Currently insured</label>
                       </div>
                     </div>
                   )}
@@ -923,54 +549,23 @@ export default function NewLeadPage() {
                     <div className={gridCls}>
                       <div>
                         <label className={labelCls}>Vehicle Year</label>
-                        <input
-                          type="number"
-                          className={inputCls}
-                          placeholder="2020"
-                          value={form.vehicleYear}
-                          onChange={(e) => set("vehicleYear", e.target.value)}
-                        />
+                        <input type="number" className={inputCls} placeholder="2020" value={form.vehicleYear} onChange={(e) => set("vehicleYear", e.target.value)} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Vehicle Make</label>
-                        <input
-                          className={inputCls}
-                          placeholder="Toyota"
-                          value={form.vehicleMake}
-                          onChange={(e) => set("vehicleMake", e.target.value)}
-                        />
+                        <input className={inputCls} placeholder="Toyota" value={form.vehicleMake} onChange={(e) => set("vehicleMake", e.target.value)} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Vehicle Model</label>
-                        <input
-                          className={inputCls}
-                          placeholder="Camry"
-                          value={form.vehicleModel}
-                          onChange={(e) => set("vehicleModel", e.target.value)}
-                        />
+                        <input className={inputCls} placeholder="Camry" value={form.vehicleModel} onChange={(e) => set("vehicleModel", e.target.value)} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Current Insurer</label>
-                        <input
-                          className={inputCls}
-                          placeholder="State Farm, Geico…"
-                          value={form.currentInsurer}
-                          onChange={(e) => set("currentInsurer", e.target.value)}
-                        />
+                        <input className={inputCls} placeholder="State Farm, Geico…" value={form.currentInsurer} onChange={(e) => set("currentInsurer", e.target.value)} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Current Monthly Premium ($)</label>
-                        <input
-                          type="number"
-                          className={inputCls}
-                          placeholder="150"
-                          value={form.currentPremium}
-                          onChange={(e) => set("currentPremium", e.target.value)}
-                        />
+                        <input type="number" className={inputCls} placeholder="150" value={form.currentPremium} onChange={(e) => set("currentPremium", e.target.value)} />
                       </div>
                     </div>
                   )}
@@ -978,47 +573,20 @@ export default function NewLeadPage() {
                   {form.vertical === "Solar" && (
                     <div className={gridCls}>
                       <div className="flex items-center gap-3 pt-2">
-                        <input
-                          type="checkbox"
-                          id="homeowner"
-                          checked={form.homeOwner}
-                          onChange={(e) => set("homeOwner", e.target.checked)}
-                          className="h-4 w-4 accent-red-500"
-                        />
-                        <label htmlFor="homeowner" className="text-sm text-gray-400">
-                          Home owner
-                        </label>
+                        <input type="checkbox" id="homeowner" checked={form.homeOwner} onChange={(e) => set("homeOwner", e.target.checked)} className="h-4 w-4 accent-[#0066cc]" />
+                        <label htmlFor="homeowner" className="text-sm text-[#8ab4d4]">Home owner</label>
                       </div>
-
                       <div>
                         <label className={labelCls}>Monthly Electric Bill ($)</label>
-                        <input
-                          type="number"
-                          className={inputCls}
-                          placeholder="200"
-                          value={form.monthlyElectricBill}
-                          onChange={(e) => set("monthlyElectricBill", e.target.value)}
-                        />
+                        <input type="number" className={inputCls} placeholder="200" value={form.monthlyElectricBill} onChange={(e) => set("monthlyElectricBill", e.target.value)} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Roof Age (years)</label>
-                        <input
-                          type="number"
-                          className={inputCls}
-                          placeholder="5"
-                          value={form.roofAge}
-                          onChange={(e) => set("roofAge", e.target.value)}
-                        />
+                        <input type="number" className={inputCls} placeholder="5" value={form.roofAge} onChange={(e) => set("roofAge", e.target.value)} />
                       </div>
-
                       <div>
                         <label className={labelCls}>Credit Score Range</label>
-                        <select
-                          className={selectCls}
-                          value={form.creditScore}
-                          onChange={(e) => set("creditScore", e.target.value)}
-                        >
+                        <select className={selectCls} value={form.creditScore} onChange={(e) => set("creditScore", e.target.value)}>
                           <option value="">Select…</option>
                           <option value="excellent">Excellent (740+)</option>
                           <option value="good">Good (670–739)</option>
@@ -1034,16 +602,15 @@ export default function NewLeadPage() {
               {/* NOTES */}
               {tab === "notes" && (
                 <div className="space-y-4">
-                  <h3 className="border-b border-white/5 pb-3 text-sm font-black text-white">
+                  <h3 className="border-b border-[#1e3a5f]/40 pb-3 text-sm font-black text-white">
                     Notes & Additional Info
                   </h3>
-
                   <textarea
                     rows={10}
                     placeholder="Enter any additional notes about this lead — conversation history, objections, follow-up details, plan preferences, etc."
                     value={form.notes}
                     onChange={(e) => set("notes", e.target.value)}
-                    className="w-full resize-none rounded-lg border border-white/8 bg-[#1a1a1a] px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-700 focus:border-red-700/50"
+                    className="w-full resize-none rounded-lg border border-[#1e3a5f]/50 bg-[#060d1a] px-4 py-3 text-sm text-white outline-none transition placeholder:text-[#3a5a8a] focus:border-[#00b4ff]/60"
                   />
                 </div>
               )}
@@ -1053,19 +620,19 @@ export default function NewLeadPage() {
             <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:justify-end">
               <button
                 onClick={() => router.back()}
-                className="rounded-lg border border-white/8 bg-white/5 px-4 py-2.5 text-sm font-semibold text-gray-400 transition hover:bg-white/10"
+                className="rounded-lg border border-[#1e3a5f]/50 bg-[#1e3a5f]/10 px-4 py-2.5 text-sm font-semibold text-[#8ab4d4] transition hover:bg-[#1e3a5f]/20"
               >
                 Cancel
               </button>
-
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="rounded-lg bg-red-600 px-6 py-2.5 text-sm font-black text-white shadow-lg shadow-red-900/30 transition hover:bg-red-500 disabled:opacity-50"
+                className="rounded-lg bg-[#0066cc] px-6 py-2.5 text-sm font-black text-white shadow-lg shadow-[#0066cc]/30 transition hover:bg-[#0080ff] disabled:opacity-50"
               >
                 {loading ? "Saving…" : "Save Lead →"}
               </button>
             </div>
+
           </div>
         </main>
       </div>

@@ -98,11 +98,12 @@ export default function SettingsPage() {
     (t) => !t.adminOnly || user?.role === "admin"
   ) as { key: Tab; label: string; icon: string; adminOnly?: boolean }[];
 
+  // Navy dark theme — matches dashboard screenshot
   const inputCls =
-    "w-full bg-[#1a1a1a] border border-white/8 rounded-lg px-4 py-2.5 text-white placeholder-gray-700 text-sm outline-none focus:border-red-700/50 transition";
+    "w-full bg-[#0a0f1e] border border-[#1e3a5f]/50 rounded-lg px-4 py-2.5 text-white placeholder-[#3a5a8a] text-sm outline-none focus:border-[#00b4ff]/60 transition";
 
   const labelCls =
-    "block text-gray-500 text-xs font-bold tracking-widest uppercase mb-1.5";
+    "block text-[#4a7aaa] text-xs font-bold tracking-widest uppercase mb-1.5";
 
   const handleProfileSave = async (e: FormEvent) => {
     e.preventDefault();
@@ -110,9 +111,6 @@ export default function SettingsPage() {
     setProfileMsg("");
 
     try {
-      // Replace with your real endpoint when ready
-      // await api.put("/api/users/me", profile);
-
       await new Promise((r) => setTimeout(r, 800));
       setProfileMsg("✅ Profile updated successfully");
     } catch {
@@ -161,9 +159,6 @@ export default function SettingsPage() {
     setNotifMsg("");
 
     try {
-      // Replace with real endpoint if available
-      // await api.put("/api/users/notifications", notifs);
-
       await new Promise((r) => setTimeout(r, 800));
       setNotifMsg("✅ Notification preferences saved");
     } catch {
@@ -180,9 +175,6 @@ export default function SettingsPage() {
     setSystemMsg("");
 
     try {
-      // Replace with real endpoint if available
-      // await api.put("/api/admin/system-settings", system);
-
       await new Promise((r) => setTimeout(r, 800));
       setSystemMsg("✅ System settings saved");
     } catch {
@@ -205,7 +197,7 @@ export default function SettingsPage() {
       onClick={onChange}
       aria-pressed={checked}
       className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${
-        checked ? "bg-red-600" : "bg-white/10"
+        checked ? "bg-[#0066cc]" : "bg-[#1e3a5f]/60"
       }`}
     >
       <span
@@ -217,7 +209,7 @@ export default function SettingsPage() {
   );
 
   return (
-    <div className="flex min-h-screen bg-[#0a0a0a]">
+    <div className="flex min-h-screen bg-[#060d1a]">
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/60 z-20 lg:hidden"
@@ -236,10 +228,11 @@ export default function SettingsPage() {
       </div>
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header className="h-14 bg-[#0d0d0d] border-b border-white/5 flex items-center px-4 gap-3 sticky top-0 z-10">
+        {/* Header — navy tone matching dashboard */}
+        <header className="h-14 bg-[#0a0f1e] border-b border-[#1e3a5f]/40 flex items-center px-4 gap-3 sticky top-0 z-10">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="lg:hidden text-gray-500 hover:text-white p-1.5 rounded-lg hover:bg-white/5 transition"
+            className="lg:hidden text-[#4a7aaa] hover:text-white p-1.5 rounded-lg hover:bg-[#1e3a5f]/30 transition"
           >
             <svg
               width="18"
@@ -267,21 +260,22 @@ export default function SettingsPage() {
               <h1 className="text-white font-black text-xl sm:text-2xl tracking-tight">
                 Settings
               </h1>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-[#4a7aaa] text-sm mt-1">
                 Manage your account and workspace preferences
               </p>
             </div>
 
+            {/* Tab bar — navy bg with cyan-blue active state */}
             <div className="overflow-x-auto">
-              <div className="flex gap-1 bg-[#111] border border-white/5 rounded-xl p-1 min-w-max sm:min-w-0">
+              <div className="flex gap-1 bg-[#0a0f1e] border border-[#1e3a5f]/40 rounded-xl p-1 min-w-max sm:min-w-0">
                 {tabs.map((t) => (
                   <button
                     key={t.key}
                     onClick={() => setTab(t.key)}
                     className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition whitespace-nowrap ${
                       tab === t.key
-                        ? "bg-red-600/20 text-red-400 border border-red-800/30"
-                        : "text-gray-500 hover:text-gray-300 hover:bg-white/5"
+                        ? "bg-[#0066cc]/25 text-[#00b4ff] border border-[#0066cc]/50"
+                        : "text-[#4a7aaa] hover:text-[#8ab4d4] hover:bg-[#1e3a5f]/20"
                     }`}
                   >
                     <span>{t.icon}</span>
@@ -292,27 +286,27 @@ export default function SettingsPage() {
             </div>
 
             {tab === "profile" && (
-              <div className="bg-[#111] border border-white/5 rounded-xl p-5 sm:p-6">
+              <div className="bg-[#0a0f1e] border border-[#1e3a5f]/40 rounded-xl p-5 sm:p-6">
                 <h3 className="text-white font-black text-base mb-5">
                   Profile Information
                 </h3>
 
-                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-6 p-4 bg-white/3 border border-white/5 rounded-xl">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-red-700 to-red-950 flex items-center justify-center shrink-0 text-2xl font-black text-white">
+                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-6 p-4 bg-[#1e3a5f]/10 border border-[#1e3a5f]/30 rounded-xl">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#0066cc] to-[#003380] flex items-center justify-center shrink-0 text-2xl font-black text-white">
                     {profile.name?.charAt(0) || "?"}
                   </div>
                   <div className="text-center sm:text-left">
                     <p className="text-white font-black text-lg">
                       {profile.name || "Unnamed User"}
                     </p>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-[#4a7aaa] text-sm">
                       {profile.email || "No email"}
                     </p>
                     <span
                       className={`inline-block mt-1.5 text-xs font-bold px-2.5 py-0.5 rounded-full border ${
                         user?.role === "admin"
-                          ? "bg-amber-950 text-amber-400 border-amber-800/40"
-                          : "bg-blue-950 text-blue-400 border-blue-800/40"
+                          ? "bg-[#1a2a00]/60 text-[#aadd00] border-[#aadd00]/30"
+                          : "bg-[#003380]/40 text-[#00b4ff] border-[#0066cc]/40"
                       }`}
                     >
                       {user?.role === "admin" ? "👑 Admin" : "🎯 Agent"}
@@ -321,7 +315,7 @@ export default function SettingsPage() {
                 </div>
 
                 {profileMsg && (
-                  <div className="mb-4 p-3 bg-green-950/60 border border-green-800/40 rounded-lg text-green-400 text-sm">
+                  <div className="mb-4 p-3 bg-[#003820]/60 border border-[#00aa55]/30 rounded-lg text-[#00cc66] text-sm">
                     {profileMsg}
                   </div>
                 )}
@@ -357,7 +351,7 @@ export default function SettingsPage() {
                     <button
                       type="submit"
                       disabled={profileSaving}
-                      className="w-full sm:w-auto bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white font-black px-6 py-2.5 rounded-lg transition text-sm shadow-lg shadow-red-900/30"
+                      className="w-full sm:w-auto bg-[#0066cc] hover:bg-[#0080ff] disabled:opacity-50 text-white font-black px-6 py-2.5 rounded-lg transition text-sm shadow-lg shadow-[#0066cc]/30"
                     >
                       {profileSaving ? "Saving…" : "Save Profile →"}
                     </button>
@@ -367,22 +361,22 @@ export default function SettingsPage() {
             )}
 
             {tab === "password" && (
-              <div className="bg-[#111] border border-white/5 rounded-xl p-5 sm:p-6">
+              <div className="bg-[#0a0f1e] border border-[#1e3a5f]/40 rounded-xl p-5 sm:p-6">
                 <h3 className="text-white font-black text-base mb-1">
                   Change Password
                 </h3>
-                <p className="text-gray-600 text-sm mb-5">
+                <p className="text-[#4a7aaa] text-sm mb-5">
                   Choose a strong password with at least 8 characters.
                 </p>
 
                 {passMsg && (
-                  <div className="mb-4 p-3 bg-green-950/60 border border-green-800/40 rounded-lg text-green-400 text-sm">
+                  <div className="mb-4 p-3 bg-[#003820]/60 border border-[#00aa55]/30 rounded-lg text-[#00cc66] text-sm">
                     {passMsg}
                   </div>
                 )}
 
                 {passError && (
-                  <div className="mb-4 p-3 bg-red-950/60 border border-red-800/40 rounded-lg text-red-400 text-sm">
+                  <div className="mb-4 p-3 bg-[#1a0a00]/60 border border-[#cc4400]/30 rounded-lg text-[#ff7744] text-sm">
                     ⚠ {passError}
                   </div>
                 )}
@@ -441,13 +435,13 @@ export default function SettingsPage() {
                       className={`${inputCls} ${
                         passwords.confirm &&
                         passwords.newPass !== passwords.confirm
-                          ? "border-red-700/60"
+                          ? "border-[#cc4400]/60"
                           : ""
                       }`}
                     />
                     {passwords.confirm &&
                       passwords.newPass !== passwords.confirm && (
-                        <p className="text-red-500 text-xs mt-1">
+                        <p className="text-[#ff7744] text-xs mt-1">
                           Passwords don&apos;t match
                         </p>
                       )}
@@ -456,22 +450,22 @@ export default function SettingsPage() {
                   <button
                     type="submit"
                     disabled={passSaving}
-                    className="w-full sm:w-auto bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white font-black px-6 py-2.5 rounded-lg transition text-sm shadow-lg shadow-red-900/30"
+                    className="w-full sm:w-auto bg-[#0066cc] hover:bg-[#0080ff] disabled:opacity-50 text-white font-black px-6 py-2.5 rounded-lg transition text-sm shadow-lg shadow-[#0066cc]/30"
                   >
                     {passSaving ? "Updating…" : "Update Password →"}
                   </button>
                 </form>
 
-                <div className="mt-6 p-4 bg-white/3 border border-white/5 rounded-xl">
-                  <p className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">
+                <div className="mt-6 p-4 bg-[#1e3a5f]/10 border border-[#1e3a5f]/30 rounded-xl">
+                  <p className="text-[#4a7aaa] text-xs font-bold uppercase tracking-wider mb-2">
                     Forgot your password?
                   </p>
-                  <p className="text-gray-600 text-sm mb-3">
+                  <p className="text-[#3a5a8a] text-sm mb-3">
                     We&apos;ll send a reset link to your email address.
                   </p>
                   <a
                     href="/forgot-password"
-                    className="inline-flex items-center gap-1.5 text-red-400 hover:text-red-300 text-sm font-semibold transition"
+                    className="inline-flex items-center gap-1.5 text-[#00b4ff] hover:text-[#66ccff] text-sm font-semibold transition"
                   >
                     Send reset email →
                   </a>
@@ -480,16 +474,16 @@ export default function SettingsPage() {
             )}
 
             {tab === "notifications" && (
-              <div className="bg-[#111] border border-white/5 rounded-xl p-5 sm:p-6">
+              <div className="bg-[#0a0f1e] border border-[#1e3a5f]/40 rounded-xl p-5 sm:p-6">
                 <h3 className="text-white font-black text-base mb-1">
                   Notification Preferences
                 </h3>
-                <p className="text-gray-600 text-sm mb-5">
+                <p className="text-[#4a7aaa] text-sm mb-5">
                   Choose what you want to be notified about.
                 </p>
 
                 {notifMsg && (
-                  <div className="mb-4 p-3 bg-green-950/60 border border-green-800/40 rounded-lg text-green-400 text-sm">
+                  <div className="mb-4 p-3 bg-[#003820]/60 border border-[#00aa55]/30 rounded-lg text-[#00cc66] text-sm">
                     {notifMsg}
                   </div>
                 )}
@@ -533,7 +527,7 @@ export default function SettingsPage() {
                   ].map((item) => (
                     <div
                       key={item.key}
-                      className="flex items-center justify-between p-4 rounded-xl hover:bg-white/3 transition group"
+                      className="flex items-center justify-between p-4 rounded-xl hover:bg-[#1e3a5f]/10 transition group"
                     >
                       <div className="flex items-center gap-3 flex-1 min-w-0 pr-4">
                         <span className="text-xl shrink-0">{item.icon}</span>
@@ -541,7 +535,7 @@ export default function SettingsPage() {
                           <p className="text-white text-sm font-semibold">
                             {item.label}
                           </p>
-                          <p className="text-gray-600 text-xs mt-0.5 truncate">
+                          <p className="text-[#3a5a8a] text-xs mt-0.5 truncate">
                             {item.desc}
                           </p>
                         </div>
@@ -559,12 +553,12 @@ export default function SettingsPage() {
                   ))}
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-white/5">
+                <div className="mt-4 pt-4 border-t border-[#1e3a5f]/30">
                   <button
                     type="button"
                     onClick={handleNotificationsSave}
                     disabled={notifSaving}
-                    className="w-full sm:w-auto bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white font-black px-6 py-2.5 rounded-lg transition text-sm shadow-lg shadow-red-900/30"
+                    className="w-full sm:w-auto bg-[#0066cc] hover:bg-[#0080ff] disabled:opacity-50 text-white font-black px-6 py-2.5 rounded-lg transition text-sm shadow-lg shadow-[#0066cc]/30"
                   >
                     {notifSaving ? "Saving…" : "Save Preferences →"}
                   </button>
@@ -574,19 +568,20 @@ export default function SettingsPage() {
 
             {tab === "team" && (
               <div className="space-y-4">
-                <div className="bg-[#111] border border-white/5 rounded-xl p-5 sm:p-6">
+                <div className="bg-[#0a0f1e] border border-[#1e3a5f]/40 rounded-xl p-5 sm:p-6">
                   <h3 className="text-white font-black text-base mb-1">
                     Team & Access
                   </h3>
-                  <p className="text-gray-600 text-sm mb-5">
+                  <p className="text-[#4a7aaa] text-sm mb-5">
                     How roles work in TopDog CRM.
                   </p>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                    <div className="p-4 bg-amber-950/20 border border-amber-800/30 rounded-xl">
+                    {/* Admin card — warm gold accent */}
+                    <div className="p-4 bg-[#1a1400]/40 border border-[#aa8800]/30 rounded-xl">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-xl">👑</span>
-                        <p className="text-amber-400 font-black text-sm">
+                        <p className="text-[#ffcc00] font-black text-sm">
                           Admin
                         </p>
                       </div>
@@ -600,9 +595,9 @@ export default function SettingsPage() {
                         ].map((p) => (
                           <li
                             key={p}
-                            className="flex items-start gap-2 text-xs text-gray-500"
+                            className="flex items-start gap-2 text-xs text-[#4a7aaa]"
                           >
-                            <span className="text-amber-600 mt-0.5 shrink-0">
+                            <span className="text-[#aa8800] mt-0.5 shrink-0">
                               ✓
                             </span>
                             {p}
@@ -611,10 +606,11 @@ export default function SettingsPage() {
                       </ul>
                     </div>
 
-                    <div className="p-4 bg-blue-950/20 border border-blue-800/30 rounded-xl">
+                    {/* Agent card — cyan-blue accent */}
+                    <div className="p-4 bg-[#00264d]/20 border border-[#0066cc]/30 rounded-xl">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-xl">🎯</span>
-                        <p className="text-blue-400 font-black text-sm">
+                        <p className="text-[#00b4ff] font-black text-sm">
                           Agent
                         </p>
                       </div>
@@ -628,9 +624,9 @@ export default function SettingsPage() {
                         ].map((p) => (
                           <li
                             key={p}
-                            className="flex items-start gap-2 text-xs text-gray-500"
+                            className="flex items-start gap-2 text-xs text-[#4a7aaa]"
                           >
-                            <span className="text-blue-600 mt-0.5 shrink-0">
+                            <span className="text-[#0066cc] mt-0.5 shrink-0">
                               ✓
                             </span>
                             {p}
@@ -640,12 +636,12 @@ export default function SettingsPage() {
                     </div>
                   </div>
 
-                  <div className="p-4 bg-white/3 border border-white/5 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <div className="p-4 bg-[#1e3a5f]/10 border border-[#1e3a5f]/30 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <div>
                       <p className="text-white text-sm font-semibold">
                         Manage user roles
                       </p>
-                      <p className="text-gray-600 text-xs mt-0.5">
+                      <p className="text-[#3a5a8a] text-xs mt-0.5">
                         Promote agents to admin or remove access
                       </p>
                     </div>
@@ -653,32 +649,33 @@ export default function SettingsPage() {
                     {user?.role === "admin" ? (
                       <a
                         href="/agents"
-                        className="shrink-0 bg-red-600 hover:bg-red-500 text-white text-sm font-bold px-4 py-2 rounded-lg transition shadow-lg shadow-red-900/30"
+                        className="shrink-0 bg-[#0066cc] hover:bg-[#0080ff] text-white text-sm font-bold px-4 py-2 rounded-lg transition shadow-lg shadow-[#0066cc]/30"
                       >
                         Go to Agents →
                       </a>
                     ) : (
-                      <span className="text-gray-600 text-xs">
+                      <span className="text-[#3a5a8a] text-xs">
                         Contact your admin
                       </span>
                     )}
                   </div>
                 </div>
 
-                <div className="bg-[#111] border border-red-900/30 rounded-xl p-5 sm:p-6">
-                  <h3 className="text-red-400 font-black text-base mb-1">
+                {/* Danger Zone — dark red tint */}
+                <div className="bg-[#0a0f1e] border border-[#660000]/40 rounded-xl p-5 sm:p-6">
+                  <h3 className="text-[#ff4444] font-black text-base mb-1">
                     Danger Zone
                   </h3>
-                  <p className="text-gray-600 text-sm mb-4">
+                  <p className="text-[#4a7aaa] text-sm mb-4">
                     These actions are irreversible. Please be certain.
                   </p>
 
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 bg-red-950/20 border border-red-900/30 rounded-xl">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 bg-[#330000]/30 border border-[#660000]/30 rounded-xl">
                     <div>
                       <p className="text-white text-sm font-semibold">
                         Sign out of all devices
                       </p>
-                      <p className="text-gray-600 text-xs mt-0.5">
+                      <p className="text-[#3a5a8a] text-xs mt-0.5">
                         Invalidates all active sessions
                       </p>
                     </div>
@@ -690,7 +687,7 @@ export default function SettingsPage() {
                         document.cookie = "user_name=; path=/; max-age=0";
                         window.location.href = "/login";
                       }}
-                      className="shrink-0 border border-red-800/50 text-red-400 hover:bg-red-950/50 text-sm font-bold px-4 py-2 rounded-lg transition"
+                      className="shrink-0 border border-[#660000]/60 text-[#ff4444] hover:bg-[#330000]/50 text-sm font-bold px-4 py-2 rounded-lg transition"
                     >
                       Sign Out Everywhere
                     </button>
@@ -701,20 +698,20 @@ export default function SettingsPage() {
 
             {tab === "system" && user?.role === "admin" && (
               <div className="space-y-4">
-                <div className="bg-[#111] border border-white/5 rounded-xl p-5 sm:p-6">
+                <div className="bg-[#0a0f1e] border border-[#1e3a5f]/40 rounded-xl p-5 sm:p-6">
                   <h3 className="text-white font-black text-base mb-5">
                     System Configuration
                   </h3>
 
                   {systemMsg && (
-                    <div className="mb-4 p-3 bg-green-950/60 border border-green-800/40 rounded-lg text-green-400 text-sm">
+                    <div className="mb-4 p-3 bg-[#003820]/60 border border-[#00aa55]/30 rounded-lg text-[#00cc66] text-sm">
                       {systemMsg}
                     </div>
                   )}
 
                   <form onSubmit={handleSystemSave} className="space-y-5">
                     <div>
-                      <p className="text-gray-500 text-xs font-bold tracking-widest uppercase mb-3">
+                      <p className="text-[#4a7aaa] text-xs font-bold tracking-widest uppercase mb-3">
                         Company Information
                       </p>
 
@@ -799,7 +796,7 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
-                      <p className="text-gray-500 text-xs font-bold tracking-widest uppercase mb-3">
+                      <p className="text-[#4a7aaa] text-xs font-bold tracking-widest uppercase mb-3">
                         Access Control
                       </p>
 
@@ -818,13 +815,13 @@ export default function SettingsPage() {
                         ].map((item) => (
                           <div
                             key={item.key}
-                            className="flex items-center justify-between p-4 rounded-xl hover:bg-white/3 transition"
+                            className="flex items-center justify-between p-4 rounded-xl hover:bg-[#1e3a5f]/10 transition"
                           >
                             <div className="flex-1 min-w-0 pr-4">
                               <p className="text-white text-sm font-semibold">
                                 {item.label}
                               </p>
-                              <p className="text-gray-600 text-xs mt-0.5">
+                              <p className="text-[#3a5a8a] text-xs mt-0.5">
                                 {item.desc}
                               </p>
                             </div>
@@ -846,14 +843,14 @@ export default function SettingsPage() {
                     <button
                       type="submit"
                       disabled={systemSaving}
-                      className="w-full sm:w-auto bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white font-black px-6 py-2.5 rounded-lg transition text-sm shadow-lg shadow-red-900/30"
+                      className="w-full sm:w-auto bg-[#0066cc] hover:bg-[#0080ff] disabled:opacity-50 text-white font-black px-6 py-2.5 rounded-lg transition text-sm shadow-lg shadow-[#0066cc]/30"
                     >
                       {systemSaving ? "Saving…" : "Save System Settings →"}
                     </button>
                   </form>
                 </div>
 
-                <div className="bg-[#111] border border-white/5 rounded-xl p-5 sm:p-6">
+                <div className="bg-[#0a0f1e] border border-[#1e3a5f]/40 rounded-xl p-5 sm:p-6">
                   <h3 className="text-white font-black text-sm mb-4">
                     Environment Info
                   </h3>
@@ -869,9 +866,9 @@ export default function SettingsPage() {
                     ].map((item) => (
                       <div
                         key={item.label}
-                        className="p-3 bg-white/3 border border-white/5 rounded-lg"
+                        className="p-3 bg-[#1e3a5f]/10 border border-[#1e3a5f]/30 rounded-lg"
                       >
-                        <p className="text-gray-600 text-[10px] font-bold uppercase tracking-wider">
+                        <p className="text-[#3a5a8a] text-[10px] font-bold uppercase tracking-wider">
                           {item.label}
                         </p>
                         <p className="text-white text-sm font-semibold mt-1">

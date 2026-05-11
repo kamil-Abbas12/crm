@@ -46,12 +46,12 @@ export function useAuth() {
       const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
       const payload = JSON.parse(atob(padded));
 
-      setUser({
-        id: String(payload.id || ""),
-        name: nameCookie || String(payload.name || ""),
-        email: String(payload.email || ""),
-        role: (payload.role || "agent") as "admin" | "agent",
-      });
+   setUser({
+  id: String(payload.id || ""),
+  name: String(payload.name || ""),
+  email: String(payload.email || ""),
+  role: (payload.role || "agent") as "admin" | "agent",
+});
     } catch {
       setUser(null);
     } finally {

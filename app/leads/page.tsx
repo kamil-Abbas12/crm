@@ -199,8 +199,12 @@ export default function LeadsPage() {
   const converted = leads.filter((l) => l.status === "converted").length;
   const hotLeads = leads.filter((l) => l.disposition === "hot").length;
 
+  // Shared input/select classes — navy dark theme
+  const selectCls =
+    "w-full rounded-lg border border-[#1e3a5f]/50 bg-[#0a0f1e] px-3 py-2 text-sm text-[#8ab4d4] outline-none transition focus:border-[#00b4ff]/60";
+
   return (
-    <div className="flex min-h-screen w-full overflow-x-hidden bg-[#0a0a0a]">
+    <div className="flex min-h-screen w-full overflow-x-hidden bg-[#060d1a]">
       <Sidebar />
 
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
@@ -208,49 +212,25 @@ export default function LeadsPage() {
 
         <main className="flex-1 overflow-y-auto overflow-x-hidden p-3 sm:p-4 lg:p-5">
           <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-4 sm:gap-5">
-            {/* Summary */}
+
+            {/* Summary cards */}
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
               {[
-                {
-                  label: "Total Leads",
-                  value: leads.length,
-                  icon: "🎯",
-                  color: "text-white",
-                },
-                {
-                  label: "Total Calls Made",
-                  value: totalCalls,
-                  icon: "📞",
-                  color: "text-orange-400",
-                },
-                {
-                  label: "Calls Answered",
-                  value: totalAnswered,
-                  icon: "✅",
-                  color: "text-green-400",
-                },
-                {
-                  label: "Converted",
-                  value: converted,
-                  icon: "🏁",
-                  color: "text-cyan-400",
-                },
-                {
-                  label: "Hot Leads",
-                  value: hotLeads,
-                  icon: "🔥",
-                  color: "text-red-400",
-                },
+                { label: "Total Leads",    value: leads.length,   icon: "🎯", color: "text-white" },
+                { label: "Total Calls Made", value: totalCalls,   icon: "📞", color: "text-orange-400" },
+                { label: "Calls Answered", value: totalAnswered,  icon: "✅", color: "text-green-400" },
+                { label: "Converted",      value: converted,      icon: "🏁", color: "text-[#00b4ff]" },
+                { label: "Hot Leads",      value: hotLeads,       icon: "🔥", color: "text-red-400" },
               ].map((s) => (
                 <div
                   key={s.label}
-                  className="rounded-xl border border-white/5 bg-[#111] p-3 text-center sm:p-4"
+                  className="rounded-xl border border-[#1e3a5f]/40 bg-[#0a0f1e] p-3 text-center sm:p-4"
                 >
                   <p className="text-base sm:text-lg">{s.icon}</p>
                   <p className={`tabular-nums text-lg font-black sm:text-2xl ${s.color}`}>
                     {loading ? "…" : s.value}
                   </p>
-                  <p className="mt-0.5 text-[10px] text-gray-600 sm:text-[11px]">
+                  <p className="mt-0.5 text-[10px] text-[#3a5a8a] sm:text-[11px]">
                     {s.label}
                   </p>
                 </div>
@@ -263,45 +243,35 @@ export default function LeadsPage() {
                 <h2 className="text-xl font-black text-white sm:text-2xl">
                   {isAdmin ? "All Leads" : "My Leads"}
                 </h2>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-[#4a7aaa]">
                   {filtered.length} of {leads.length} leads
                 </p>
               </div>
 
               <Link
                 href="/leads/new"
-                className="inline-flex items-center justify-center rounded-lg bg-red-600 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-red-900/30 transition hover:bg-red-500 sm:w-auto"
+                className="inline-flex items-center justify-center rounded-lg bg-[#0066cc] px-4 py-2 text-sm font-bold text-white shadow-lg shadow-[#0066cc]/30 transition hover:bg-[#0080ff] sm:w-auto"
               >
                 ＋ Add Lead
               </Link>
             </div>
 
             {/* Filters */}
-            <div className="rounded-xl border border-white/5 bg-[#111] p-4">
+            <div className="rounded-xl border border-[#1e3a5f]/40 bg-[#0a0f1e] p-4">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
                 <input
                   type="text"
                   placeholder="Search name, phone, zip…"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full rounded-lg border border-white/8 bg-[#1a1a1a] px-3 py-2 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-red-700/50"
+                  className="w-full rounded-lg border border-[#1e3a5f]/50 bg-[#060d1a] px-3 py-2 text-sm text-white outline-none transition placeholder:text-[#3a5a8a] focus:border-[#00b4ff]/60"
                 />
 
-                <select
-                  value={vertical}
-                  onChange={(e) => setVertical(e.target.value)}
-                  className="w-full rounded-lg border border-white/8 bg-[#1a1a1a] px-3 py-2 text-sm text-gray-300 outline-none transition focus:border-red-700/50"
-                >
-                  {VERTICALS.map((v) => (
-                    <option key={v}>{v}</option>
-                  ))}
+                <select value={vertical} onChange={(e) => setVertical(e.target.value)} className={selectCls}>
+                  {VERTICALS.map((v) => <option key={v}>{v}</option>)}
                 </select>
 
-                <select
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  className="w-full rounded-lg border border-white/8 bg-[#1a1a1a] px-3 py-2 text-sm text-gray-300 outline-none transition focus:border-red-700/50"
-                >
+                <select value={status} onChange={(e) => setStatus(e.target.value)} className={selectCls}>
                   {STATUSES.map((s) => (
                     <option key={s} value={s}>
                       {s === "All" ? "All Status" : s.replace(/_/g, " ")}
@@ -309,21 +279,11 @@ export default function LeadsPage() {
                   ))}
                 </select>
 
-                <select
-                  value={source}
-                  onChange={(e) => setSource(e.target.value)}
-                  className="w-full rounded-lg border border-white/8 bg-[#1a1a1a] px-3 py-2 text-sm text-gray-300 outline-none transition focus:border-red-700/50"
-                >
-                  {SOURCES.map((s) => (
-                    <option key={s}>{s}</option>
-                  ))}
+                <select value={source} onChange={(e) => setSource(e.target.value)} className={selectCls}>
+                  {SOURCES.map((s) => <option key={s}>{s}</option>)}
                 </select>
 
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full rounded-lg border border-white/8 bg-[#1a1a1a] px-3 py-2 text-sm text-gray-300 outline-none transition focus:border-red-700/50"
-                >
+                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className={selectCls}>
                   <option value="newest">Newest first</option>
                   <option value="oldest">Oldest first</option>
                   <option value="calls">Most calls</option>
@@ -331,15 +291,11 @@ export default function LeadsPage() {
                 </select>
               </div>
 
-              {(search ||
-                vertical !== "All" ||
-                status !== "All" ||
-                source !== "All" ||
-                sortBy !== "newest") && (
+              {(search || vertical !== "All" || status !== "All" || source !== "All" || sortBy !== "newest") && (
                 <div className="mt-3 flex justify-start">
                   <button
                     onClick={clearFilters}
-                    className="text-sm text-gray-500 transition hover:text-gray-300"
+                    className="text-sm text-[#4a7aaa] transition hover:text-[#8ab4d4]"
                   >
                     Clear filters ✕
                   </button>
@@ -351,30 +307,21 @@ export default function LeadsPage() {
             <div className="space-y-3 lg:hidden">
               {loading ? (
                 [...Array(6)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-36 animate-pulse rounded-xl border border-white/5 bg-[#111]"
-                  />
+                  <div key={i} className="h-36 animate-pulse rounded-xl border border-[#1e3a5f]/30 bg-[#0a0f1e]" />
                 ))
               ) : filtered.length === 0 ? (
-                <div className="rounded-xl border border-white/5 bg-[#111] p-10 text-center">
+                <div className="rounded-xl border border-[#1e3a5f]/40 bg-[#0a0f1e] p-10 text-center">
                   <p className="mb-2 text-4xl">🎯</p>
-                  <p className="font-semibold text-gray-500">No leads found</p>
-                  <Link
-                    href="/leads/new"
-                    className="mt-2 inline-block text-sm text-red-400 hover:underline"
-                  >
+                  <p className="font-semibold text-[#4a7aaa]">No leads found</p>
+                  <Link href="/leads/new" className="mt-2 inline-block text-sm text-[#00b4ff] hover:underline">
                     Add your first lead →
                   </Link>
                 </div>
               ) : (
                 filtered.map((lead) => (
-                  <div
-                    key={lead._id}
-                    className="rounded-xl border border-white/5 bg-[#111] p-4"
-                  >
+                  <div key={lead._id} className="rounded-xl border border-[#1e3a5f]/40 bg-[#0a0f1e] p-4">
                     <div className="flex items-start gap-3">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-red-800 to-red-950">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#0066cc] to-[#003380]">
                         <span className="text-sm font-bold text-white">
                           {lead.name?.charAt(0) || "?"}
                         </span>
@@ -391,72 +338,30 @@ export default function LeadsPage() {
                             </span>
                           )}
                           {lead.priority === "high" && (
-                            <span className="text-[10px] font-bold text-red-400">
-                              ⚡ HIGH
-                            </span>
+                            <span className="text-[10px] font-bold text-red-400">⚡ HIGH</span>
                           )}
                         </div>
-
-                        <p className="mt-0.5 break-words text-xs text-gray-500">
+                        <p className="mt-0.5 break-words text-xs text-[#3a5a8a]">
                           {lead.email || lead.zipCode || "No extra contact info"}
                         </p>
                       </div>
                     </div>
 
                     <div className="mt-4 grid grid-cols-2 gap-3 text-xs sm:grid-cols-3">
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider text-gray-600">
-                          Phone
-                        </p>
-                        <p className="mt-1 text-gray-300">{lead.phone || "—"}</p>
-                      </div>
-
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider text-gray-600">
-                          Vertical
-                        </p>
-                        <p className="mt-1 text-gray-300">{lead.vertical || "—"}</p>
-                        {lead.subType && (
-                          <p className="text-[10px] text-gray-600">{lead.subType}</p>
-                        )}
-                      </div>
-
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider text-gray-600">
-                          Source
-                        </p>
-                        <p className="mt-1 text-gray-300">{lead.leadSource || "—"}</p>
-                      </div>
-
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider text-gray-600">
-                          Calls
-                        </p>
-                        <p className="mt-1 text-gray-300">
-                          {lead.callCount || 0}
-                          {lead.callCount ? ` (${lead.callsAnswered || 0} answered)` : ""}
-                        </p>
-                      </div>
-
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider text-gray-600">
-                          State
-                        </p>
-                        <p className="mt-1 text-gray-300">{lead.state || "—"}</p>
-                      </div>
-
-                      <div>
-                        <p className="text-[10px] uppercase tracking-wider text-gray-600">
-                          {isAdmin ? "Agent" : "Date"}
-                        </p>
-                        <p className="mt-1 text-gray-300">
-                          {isAdmin
-                            ? lead.agent || "—"
-                            : lead.createdAt
-                            ? new Date(lead.createdAt).toLocaleDateString()
-                            : "—"}
-                        </p>
-                      </div>
+                      {[
+                        { label: "Phone",    value: lead.phone || "—" },
+                        { label: "Vertical", value: lead.vertical || "—", sub: lead.subType },
+                        { label: "Source",   value: lead.leadSource || "—" },
+                        { label: "Calls",    value: lead.callCount ? `${lead.callCount} (${lead.callsAnswered || 0} answered)` : "0" },
+                        { label: "State",    value: lead.state || "—" },
+                        { label: isAdmin ? "Agent" : "Date", value: isAdmin ? (lead.agent || "—") : (lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : "—") },
+                      ].map((item) => (
+                        <div key={item.label}>
+                          <p className="text-[10px] uppercase tracking-wider text-[#3a5a8a]">{item.label}</p>
+                          <p className="mt-1 text-[#8ab4d4]">{item.value}</p>
+                          {item.sub && <p className="text-[10px] text-[#3a5a8a]">{item.sub}</p>}
+                        </div>
+                      ))}
                     </div>
 
                     <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -469,16 +374,10 @@ export default function LeadsPage() {
                       </span>
 
                       <div className="flex gap-3">
-                        <Link
-                          href={`/leads/${lead._id}`}
-                          className="text-sm font-medium text-blue-400 hover:text-blue-300"
-                        >
+                        <Link href={`/leads/${lead._id}`} className="text-sm font-medium text-[#00b4ff] hover:text-[#66ccff]">
                           Edit
                         </Link>
-                        <button
-                          onClick={() => handleDelete(lead._id)}
-                          className="text-sm text-red-500 hover:text-red-400"
-                        >
+                        <button onClick={() => handleDelete(lead._id)} className="text-sm text-red-500 hover:text-red-400">
                           Delete
                         </button>
                       </div>
@@ -489,43 +388,33 @@ export default function LeadsPage() {
             </div>
 
             {/* Desktop Table */}
-            <div className="hidden overflow-hidden rounded-xl border border-white/5 bg-[#111] lg:block">
+            <div className="hidden overflow-hidden rounded-xl border border-[#1e3a5f]/40 bg-[#0a0f1e] lg:block">
               {loading ? (
                 <div className="space-y-3 p-6">
                   {[...Array(6)].map((_, i) => (
-                    <div key={i} className="h-12 animate-pulse rounded bg-white/5" />
+                    <div key={i} className="h-12 animate-pulse rounded bg-[#1e3a5f]/20" />
                   ))}
                 </div>
               ) : filtered.length === 0 ? (
                 <div className="p-12 text-center">
                   <p className="mb-2 text-4xl">🎯</p>
-                  <p className="font-semibold text-gray-500">No leads found</p>
-                  <Link
-                    href="/leads/new"
-                    className="mt-1 inline-block text-sm text-red-400 hover:underline"
-                  >
+                  <p className="font-semibold text-[#4a7aaa]">No leads found</p>
+                  <Link href="/leads/new" className="mt-1 inline-block text-sm text-[#00b4ff] hover:underline">
                     Add your first lead →
                   </Link>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="min-w-full text-sm">
-                    <thead className="border-b border-white/5">
+                    <thead className="border-b border-[#1e3a5f]/40">
                       <tr>
                         {[
-                          "Lead",
-                          "Phone",
-                          "Vertical",
-                          "Source",
-                          "Calls",
-                          "Status",
-                          "State",
-                          isAdmin ? "Agent" : "Date",
-                          "",
+                          "Lead", "Phone", "Vertical", "Source", "Calls",
+                          "Status", "State", isAdmin ? "Agent" : "Date", "",
                         ].map((h, i) => (
                           <th
                             key={i}
-                            className="whitespace-nowrap px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-gray-600"
+                            className="whitespace-nowrap px-4 py-3 text-left text-[10px] font-bold uppercase tracking-wider text-[#3a5a8a]"
                           >
                             {h}
                           </th>
@@ -533,12 +422,12 @@ export default function LeadsPage() {
                       </tr>
                     </thead>
 
-                    <tbody className="divide-y divide-white/5">
+                    <tbody className="divide-y divide-[#1e3a5f]/30">
                       {filtered.map((lead) => (
-                        <tr key={lead._id} className="group transition hover:bg-white/3">
+                        <tr key={lead._id} className="group transition hover:bg-[#1e3a5f]/10">
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-2.5">
-                              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-red-800 to-red-950">
+                              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#0066cc] to-[#003380]">
                                 <span className="text-xs font-bold text-white">
                                   {lead.name?.charAt(0) || "?"}
                                 </span>
@@ -555,44 +444,36 @@ export default function LeadsPage() {
                                     </span>
                                   )}
                                   {lead.priority === "high" && (
-                                    <span className="text-[10px] font-bold text-red-400">
-                                      ⚡HIGH
-                                    </span>
+                                    <span className="text-[10px] font-bold text-red-400">⚡HIGH</span>
                                   )}
                                 </div>
-                                <p className="truncate text-xs text-gray-600">
+                                <p className="truncate text-xs text-[#3a5a8a]">
                                   {lead.email || lead.zipCode || ""}
                                 </p>
                               </div>
                             </div>
                           </td>
 
-                          <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-400">
+                          <td className="whitespace-nowrap px-4 py-3 text-sm text-[#8ab4d4]">
                             {lead.phone || "—"}
                           </td>
 
                           <td className="px-4 py-3">
                             <div>
-                              <p className="text-xs font-medium text-gray-300">
-                                {lead.vertical || "—"}
-                              </p>
-                              {lead.subType && (
-                                <p className="text-[10px] text-gray-600">{lead.subType}</p>
-                              )}
+                              <p className="text-xs font-medium text-[#8ab4d4]">{lead.vertical || "—"}</p>
+                              {lead.subType && <p className="text-[10px] text-[#3a5a8a]">{lead.subType}</p>}
                             </div>
                           </td>
 
-                          <td className="whitespace-nowrap px-4 py-3 text-xs text-gray-500">
+                          <td className="whitespace-nowrap px-4 py-3 text-xs text-[#4a7aaa]">
                             {lead.leadSource || "—"}
                           </td>
 
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-1.5">
-                              <span className="text-sm font-bold text-white">
-                                {lead.callCount || 0}
-                              </span>
+                              <span className="text-sm font-bold text-white">{lead.callCount || 0}</span>
                               {(lead.callCount || 0) > 0 && (
-                                <span className="text-[10px] text-gray-600">
+                                <span className="text-[10px] text-[#3a5a8a]">
                                   ({lead.callsAnswered || 0}✅)
                                 </span>
                               )}
@@ -609,11 +490,9 @@ export default function LeadsPage() {
                             </span>
                           </td>
 
-                          <td className="px-4 py-3 text-xs text-gray-600">
-                            {lead.state || "—"}
-                          </td>
+                          <td className="px-4 py-3 text-xs text-[#4a7aaa]">{lead.state || "—"}</td>
 
-                          <td className="whitespace-nowrap px-4 py-3 text-xs text-gray-600">
+                          <td className="whitespace-nowrap px-4 py-3 text-xs text-[#4a7aaa]">
                             {isAdmin
                               ? lead.agent || "—"
                               : lead.createdAt
@@ -623,16 +502,10 @@ export default function LeadsPage() {
 
                           <td className="px-4 py-3">
                             <div className="flex gap-2 opacity-0 transition group-hover:opacity-100">
-                              <Link
-                                href={`/leads/${lead._id}`}
-                                className="text-xs font-medium text-blue-400 hover:text-blue-300"
-                              >
+                              <Link href={`/leads/${lead._id}`} className="text-xs font-medium text-[#00b4ff] hover:text-[#66ccff]">
                                 Edit
                               </Link>
-                              <button
-                                onClick={() => handleDelete(lead._id)}
-                                className="text-xs text-red-500 hover:text-red-400"
-                              >
+                              <button onClick={() => handleDelete(lead._id)} className="text-xs text-red-500 hover:text-red-400">
                                 Delete
                               </button>
                             </div>
@@ -644,6 +517,7 @@ export default function LeadsPage() {
                 </div>
               )}
             </div>
+
           </div>
         </main>
       </div>

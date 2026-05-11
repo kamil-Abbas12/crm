@@ -28,7 +28,7 @@ interface SidebarProps {
 export default function Sidebar({ onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user } = useAuth();
+  const {user} = useAuth();
   const nav = user?.role === "admin" ? adminNav : agentNav;
 
   const logout = () => {
@@ -39,20 +39,20 @@ export default function Sidebar({ onClose }: SidebarProps) {
   };
 
   return (
-    <aside className="w-60 h-full min-h-screen bg-[#0d0d0d] border-r border-white/5 flex flex-col">
-      {/* Brand + close button on mobile */}
-      <div className="px-5 py-5 border-b border-white/5 flex items-center justify-between">
+    <aside className="w-60 h-full min-h-screen bg-[#0d1526] border-r border-blue-900/30 flex flex-col">
+      {/* Brand */}
+      <div className="px-5 py-5 border-b border-blue-900/30 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-red-600 flex items-center justify-center shadow-lg shadow-red-900/50">
+          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-900/50">
             <span className="text-white font-black text-xs">TD</span>
           </div>
           <div>
             <p className="text-white font-black text-sm leading-none">TOPDOG</p>
-            <p className="text-red-500 text-[10px] font-semibold tracking-widest">CRM</p>
+            <p className="text-blue-400 text-[10px] font-semibold tracking-widest">CRM</p>
           </div>
         </div>
         {onClose && (
-          <button onClick={onClose} className="text-gray-600 hover:text-white p-1 rounded-lg hover:bg-white/5 transition lg:hidden">
+          <button onClick={onClose} className="text-blue-700 hover:text-white p-1 rounded-lg hover:bg-blue-900/30 transition lg:hidden">
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -81,27 +81,27 @@ export default function Sidebar({ onClose }: SidebarProps) {
             <Link key={item.href} href={item.href} onClick={onClose}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 active
-                  ? "bg-red-600/15 text-red-400 border border-red-800/30"
-                  : "text-gray-500 hover:text-gray-200 hover:bg-white/5"
+                  ? "bg-blue-600/20 text-blue-300 border border-blue-600/40"
+                  : "text-blue-300/50 hover:text-blue-100 hover:bg-blue-900/20"
               }`}>
               <span className="text-base w-5 text-center leading-none">{item.icon}</span>
               <span>{item.label}</span>
-              {active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-red-500" />}
+              {active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400" />}
             </Link>
           );
         })}
       </nav>
 
       {/* User footer */}
-      <div className="px-4 py-4 border-t border-white/5">
+      <div className="px-4 py-4 border-t border-blue-900/30">
         {user && (
           <div className="mb-3 px-1">
             <p className="text-white text-sm font-semibold truncate">{user.name}</p>
-            <p className="text-gray-600 text-xs truncate">{user.email}</p>
+            <p className="text-blue-400/50 text-xs truncate">{user.email}</p>
           </div>
         )}
         <button onClick={logout}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-gray-600 hover:text-red-400 hover:bg-red-950/30 text-sm transition">
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-blue-400/50 hover:text-blue-300 hover:bg-blue-900/30 text-sm transition">
           <span>⬅</span> Sign out
         </button>
       </div>

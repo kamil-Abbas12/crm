@@ -1,22 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0a0f1e;
+  --foreground: #f0f4ff;
+  --card: #0d1526;
+  --border: rgba(59, 130, 246, 0.15);
+  --accent: #3b82f6;
 }
 
 body {
@@ -24,5 +13,51 @@ body {
   padding: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: #0d1526; }
+::-webkit-scrollbar-thumb { background: #1e3a6e; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+
+select option { background: #0f1d3a; color: #e2e8f0; }
+textarea { font-family: inherit; }
+
+/* ── Globe: pure Y-axis spin — fast enough to look alive ── */
+@keyframes globeSpin {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
+}
+
+/* Glow breathe */
+@keyframes glowPulse {
+  0%,100% { opacity: 0.55; transform: scale(1); }
+  50%     { opacity: 1;    transform: scale(1.06); }
+}
+
+/* Orbit rings */
+@keyframes orbitCW {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes orbitCCW {
+  from { transform: rotate(360deg); }
+  to   { transform: rotate(0deg); }
+}
+
+/* 
+  7s = noticeably spinning, clearly 3D, not too dizzying.
+  The rotateX(22deg) tilt on the parent means the near
+  hemisphere is visibly larger than the far hemisphere.
+*/
+.globe-spin {
+  animation: globeSpin 7s linear infinite;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.orbit-cw  { animation: orbitCW  8s linear infinite; }
+.orbit-ccw { animation: orbitCCW 10s linear infinite; }
+.glow-pulse { animation: glowPulse 1s ease-in-out infinite; }
