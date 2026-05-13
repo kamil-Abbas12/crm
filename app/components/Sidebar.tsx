@@ -17,9 +17,12 @@ const adminNav = [
   { href: "/leads", label: "All Leads", icon: "🎯" },
   { href: "/activity", label: "Activity Log", icon: "📝" },
   { href: "/agents", label: "Agents", icon: "👥" },
+  { href: "/clients", label: "Clients", icon: "🧑" },
+  { href: "/publisher", label: "Publishers", icon: "📡" },
   { href: "/admin/reports", label: "Reports", icon: "📊" },
   { href: "/admin/settings", label: "Settings", icon: "⚙️" },
 ];
+
 
 interface SidebarProps {
   onClose?: () => void;

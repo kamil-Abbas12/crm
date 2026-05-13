@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AuthGlobeHero from "../../components/AuthGlobeHero";
+import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,100 +26,185 @@ export default function LoginPage() {
       document.cookie = `user_name=${encodeURIComponent(name)}; path=/; max-age=${maxAge}`;
       router.push("/dashboard");
     } catch (err: unknown) {
-      const msg =
-        err instanceof Error
-          ? err.message
-          : (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
-      setError(msg || "Login failed");
+      // Always read the server's error message from the response body
+      const axiosErr = err as {
+        response?: { data?: { error?: string }; status?: number };
+      };
+      const serverMsg = axiosErr?.response?.data?.error;
+      setError(serverMsg || "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="relative min-h-screen overflow-hidden bg-[#0a0f1e] px-4 py-10">
-      {/* Background glows */}
-      <div
-        className="pointer-events-none fixed inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(59,130,246,0.12) 0%, transparent 70%)",
-        }}
+ return (
+  <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#050816] px-4 py-10">
+    
+    {/* Background Effects */}
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(37,99,235,0.18),transparent_45%)]" />
+    <div className="absolute left-[-120px] top-[-120px] h-[300px] w-[300px] rounded-full bg-cyan-500/10 blur-3xl" />
+    <div className="absolute bottom-[-150px] right-[-120px] h-[320px] w-[320px] rounded-full bg-blue-700/10 blur-3xl" />
+
+    <div className="relative z-10 grid w-full max-w-5xl overflow-hidden rounded-[32px] border border-white/10 bg-white/5 shadow-[0_0_80px_rgba(37,99,235,0.15)] backdrop-blur-2xl md:grid-cols-2">
+      
+      {/* Left Side */}
+<div className="hidden flex-col items-center justify-center border-r border-white/10 bg-gradient-to-br from-blue-950/40 to-cyan-950/20 p-10 text-center md:flex">
+  
+  <div className="flex flex-col items-center">
+    
+    <div className="mb-6 flex flex-col items-center">
+      <Image
+        src="/logo.jpg"
+        alt="TopDog Logo"
+        width={70}
+        height={70}
+        className="rounded-2xl object-cover shadow-2xl"
       />
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-cyan-500/10 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 left-1/2 h-[320px] w-[320px] -translate-x-1/2 rounded-full bg-blue-700/10 blur-3xl" />
 
-      <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center">
-        <div className="w-full">
-          <AuthGlobeHero />
+      <h2 className="mt-4 text-2xl font-black tracking-wide text-white">
+        TOP DOG CRM
+      </h2>
 
-          <div className="mb-8 text-center">
-            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-600 shadow-lg shadow-blue-900/50">
-              <span className="text-base font-black text-white">TD</span>
-            </div>
-            <h1 className="text-2xl font-black tracking-tight text-white">TOPDOG CRM</h1>
-            <p className="mt-1 text-sm text-blue-400/50">Sign in to your workspace</p>
+      <p className="mt-1 text-sm text-blue-200/60">
+        Lead Management Platform
+      </p>
+    </div>
+
+    <div className="mb-8">
+      <AuthGlobeHero />
+    </div>
+
+    <div className="space-y-4">
+      <h3 className="text-4xl font-black leading-tight text-white">
+        Build Your Team.
+        <br />
+        Grow Smarter.
+      </h3>
+
+      <p className="mx-auto max-w-md text-sm leading-relaxed text-blue-100/60">
+        Create your secure CRM account and manage leads, clients,
+        workflows, and communication from one modern platform.
+      </p>
+    </div>
+  </div>
+</div>
+
+      {/* Right Side */}
+      <div className="flex items-center justify-center p-6 sm:p-10">
+        <div className="w-full max-w-md">
+          
+          {/* Mobile Logo */}
+          <div className="mb-8 flex flex-col items-center text-center md:hidden">
+            <Image
+              src="/logo.jpg"
+              alt="TopDog Logo"
+              width={70}
+              height={70}
+              className="rounded-2xl shadow-xl"
+            />
+
+            <h1 className="mt-4 text-2xl font-black tracking-tight text-white">
+              TOP DOG CRM
+            </h1>
+
+            <p className="mt-1 text-sm text-blue-200/50">
+              Sign in to continue
+            </p>
           </div>
 
-          <div className="rounded-2xl border border-blue-900/30 bg-[#0d1526]/90 p-6 backdrop-blur-md">
+          {/* Header */}
+          <div className="mb-8 hidden md:block">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.25em] text-blue-400">
+              Welcome Back
+            </p>
+
+            <h1 className="text-4xl font-black tracking-tight text-white">
+              Sign In
+            </h1>
+
+            <p className="mt-2 text-sm text-blue-100/50">
+              Access your CRM dashboard securely
+            </p>
+          </div>
+
+          {/* Form Card */}
+          <div className="rounded-3xl border border-white/10 bg-[#0b1120]/80 p-7 shadow-2xl backdrop-blur-xl">
+            
             {error && (
-              <div className="mb-4 flex items-center gap-2 rounded-lg border border-red-800/40 bg-red-950/60 p-3 text-sm text-red-400">
-                <span>⚠</span> {error}
+              <div className="mb-5 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-300">
+                ⚠ {error}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              
               <div>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-blue-400/60">
-                  Email
+                <label className="mb-2 block text-sm font-semibold text-blue-100/70">
+                  Email Address
                 </label>
+
                 <input
                   type="email"
                   required
-                  placeholder="you@email.com"
+                  placeholder="you@example.com"
                   value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="w-full rounded-lg border border-blue-900/40 bg-[#0a0f1e] px-4 py-2.5 text-sm text-white placeholder-blue-900/60 outline-none transition focus:border-blue-600/60"
+                  onChange={(e) =>
+                    setForm({ ...form, email: e.target.value })
+                  }
+                  className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-blue-100/30 outline-none transition-all duration-300 focus:border-blue-500 focus:bg-white/[0.07] focus:ring-4 focus:ring-blue-500/20"
                 />
               </div>
 
               <div>
-                <div className="mb-1.5 flex items-center justify-between">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-blue-400/60">
+                <div className="mb-2 flex items-center justify-between">
+                  <label className="text-sm font-semibold text-blue-100/70">
                     Password
                   </label>
-                  <Link href="/forgot-password" className="text-xs font-semibold text-blue-400 transition hover:text-blue-300">
-                    Forgot password?
+
+                  <Link
+                    href="/forgot-password"
+                    className="text-xs font-medium text-blue-400 transition hover:text-blue-300"
+                  >
+                    Forgot Password?
                   </Link>
                 </div>
+
                 <input
                   type="password"
                   required
                   placeholder="••••••••"
                   value={form.password}
-                  onChange={(e) => setForm({ ...form, password: e.target.value })}
-                  className="w-full rounded-lg border border-blue-900/40 bg-[#0a0f1e] px-4 py-2.5 text-sm text-white placeholder-blue-900/60 outline-none transition focus:border-blue-600/60"
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
+                  className="h-12 w-full rounded-2xl border border-white/10 bg-white/5 px-4 text-sm text-white placeholder:text-blue-100/30 outline-none transition-all duration-300 focus:border-blue-500 focus:bg-white/[0.07] focus:ring-4 focus:ring-blue-500/20"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="mt-1 w-full rounded-lg bg-blue-600 py-2.5 text-sm font-black tracking-wide text-white shadow-lg shadow-blue-900/40 transition hover:bg-blue-500 disabled:opacity-50"
+                className="group relative flex h-12 w-full items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 text-sm font-bold tracking-wide text-white shadow-[0_10px_30px_rgba(37,99,235,0.35)] transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_15px_40px_rgba(37,99,235,0.45)] disabled:opacity-50"
               >
-                {loading ? "Signing in…" : "Sign In →"}
+                <span className="relative z-10">
+                  {loading ? "Signing in..." : "Sign In →"}
+                </span>
               </button>
             </form>
           </div>
 
-          <p className="mt-4 text-center text-sm text-blue-400/40">
-            No account?{" "}
-            <Link href="/signup" className="font-semibold text-blue-400 hover:text-blue-300">
-              Create one
+          <p className="mt-6 text-center text-sm text-blue-100/40">
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/signup"
+              className="font-semibold text-blue-400 transition hover:text-blue-300"
+            >
+              Create Account
             </Link>
           </p>
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 }

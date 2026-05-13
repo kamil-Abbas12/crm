@@ -65,7 +65,7 @@ export default function AuthGlobeHero() {
 
             {/* The globe image */}
             <img
-              src="/Logo.png"
+              src="/globe.png"
               alt="TopDog Globe"
               width={220}
               height={220}
