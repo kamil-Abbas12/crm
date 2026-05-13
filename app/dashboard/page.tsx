@@ -57,35 +57,35 @@ export default function DashboardPage() {
       0
     ) || 1;
 
-  // Buffer  = successful calls between client and member
-  // Non-Buffer = attained (picked up but rejected) or not connected
-  // Total Calls = buffer + non-buffer
-  const bufferCalls = stats?.bufferCalls ?? stats?.successfulCalls ?? "—";
-  const nonBufferCalls =
-    stats?.nonBufferCalls ?? stats?.failedCalls ?? "—";
+  // Bailable  = successful calls between client and member
+  // Non-Bailable = attained (picked up but rejected) or not connected
+  // Total Calls = bailable + non-bailable
+  const bailableCalls = stats?.bailableCalls ?? stats?.successfulCalls ?? "—";
+  const nonBailableCalls =
+    stats?.nonBailableCalls ?? stats?.failedCalls ?? "—";
   const totalCalls =
-    typeof bufferCalls === "number" && typeof nonBufferCalls === "number"
-      ? bufferCalls + nonBufferCalls
+    typeof bailableCalls === "number" && typeof nonBailableCalls === "number"
+      ? bailableCalls + nonBailableCalls
       : stats?.totalCalls ?? "—";
 
   const adminStatCards = [
     {
-      label: "Total Buffer",
+      label: "Total Bailable",
       value: stats?.totalLeads ?? "—",
       icon: "🎯",
       sub: `${stats?.leadsToday ?? 0} today`,
       accent: "blue",
     },
     {
-      label: "Buffer Calls",
-      value: bufferCalls,
+      label: "Bailable Calls",
+      value: bailableCalls,
       icon: "✅",
       sub: "Successful connections",
       accent: "emerald",
     },
     {
-      label: "Non-Buffer Calls",
-      value: nonBufferCalls,
+      label: "Non-Bailable Calls",
+      value: nonBailableCalls,
       icon: "📵",
       sub: "Attained / Rejected",
       accent: "rose",
@@ -94,7 +94,7 @@ export default function DashboardPage() {
       label: "Total Calls",
       value: totalCalls,
       icon: "📞",
-      sub: "Buffer + Non-Buffer",
+      sub: "Bailable + Non-Bailable",
       accent: "cyan",
     },
     {
@@ -108,22 +108,22 @@ export default function DashboardPage() {
 
   const agentStatCards = [
     {
-      label: "My Buffer",
+      label: "My Bailable",
       value: stats?.totalLeads ?? "—",
       icon: "🎯",
       sub: `${stats?.leadsToday ?? 0} today`,
       accent: "blue",
     },
     {
-      label: "Buffer Calls",
-      value: bufferCalls,
+      label: "Bailable Calls",
+      value: bailableCalls,
       icon: "✅",
       sub: "Successful connections",
       accent: "emerald",
     },
     {
-      label: "Non-Buffer Calls",
-      value: nonBufferCalls,
+      label: "Non-Bailable Calls",
+      value: nonBailableCalls,
       icon: "📵",
       sub: "Attained / Rejected",
       accent: "rose",
@@ -132,7 +132,7 @@ export default function DashboardPage() {
       label: "Total Calls",
       value: totalCalls,
       icon: "📞",
-      sub: "Buffer + Non-Buffer",
+      sub: "Bailable + Non-Bailable",
       accent: "cyan",
     },
   ];
@@ -281,7 +281,7 @@ export default function DashboardPage() {
             <div className="bg-[#0d1526] border border-blue-900/30 rounded-xl p-4 sm:p-5">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-white font-black text-sm">
-                  Buffer by Vertical
+                  Bailable by Vertical
                 </h3>
                 <span className="text-xs text-blue-400/40">
                   {stats?.totalLeads ?? 0} total
@@ -339,16 +339,16 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <p className="text-blue-400/40 text-sm text-center py-4">
-                  No buffer yet.
+                  No bailable yet.
                 </p>
               )}
             </div>
 
-            {/* Recent Buffer (leads) */}
+            {/* Recent Bailable (leads) */}
             <div className="bg-[#0d1526] border border-blue-900/30 rounded-xl p-4 sm:p-5">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-white font-black text-sm">
-                  Recent Buffer
+                  Recent Bailable
                 </h3>
                 <Link
                   href="/leads"
@@ -369,13 +369,13 @@ export default function DashboardPage() {
               ) : leads.length === 0 ? (
                 <div className="text-center py-6">
                   <p className="text-blue-400/40 text-sm">
-                    No buffer yet.
+                    No bailable yet.
                   </p>
                   <Link
                     href="/leads/new"
                     className="text-blue-400 text-sm hover:underline mt-1 inline-block"
                   >
-                    Add first buffer →
+                    Add first bailable →
                   </Link>
                 </div>
               ) : (
@@ -427,22 +427,22 @@ export default function DashboardPage() {
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-emerald-500" />
                     <span className="text-emerald-300 text-xs font-semibold">
-                      Buffer Calls
+                      Bailable Calls
                     </span>
                   </div>
                   <span className="text-emerald-400 font-black text-sm tabular-nums">
-                    {loading ? "…" : bufferCalls}
+                    {loading ? "…" : bailableCalls}
                   </span>
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-lg bg-rose-950/20 border border-rose-800/20">
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-rose-500" />
                     <span className="text-rose-300 text-xs font-semibold">
-                      Non-Buffer Calls
+                      Non-Bailable Calls
                     </span>
                   </div>
                   <span className="text-rose-400 font-black text-sm tabular-nums">
-                    {loading ? "…" : nonBufferCalls}
+                    {loading ? "…" : nonBailableCalls}
                   </span>
                 </div>
                 <div className="flex items-center justify-between p-2.5 rounded-lg bg-blue-950/20 border border-blue-800/20">
@@ -482,7 +482,7 @@ export default function DashboardPage() {
                     >
                       <span>🎯</span>
                       <span className="text-blue-300 text-sm font-semibold">
-                        All Buffer
+                        All Bailable
                       </span>
                     </Link>
                     <Link
@@ -521,7 +521,7 @@ export default function DashboardPage() {
                     >
                       <span>🎯</span>
                       <span className="text-blue-300 text-sm font-semibold">
-                        Add New Buffer
+                        Add New Bailable
                       </span>
                     </Link>
                     <Link
