@@ -76,9 +76,9 @@ export default function LoginPage() {
 
     <div className="space-y-4">
       <h3 className="text-4xl font-black leading-tight text-white">
-        Build Your Team.
+        Build Your Team
         <br />
-        Grow Smarter.
+        Grow Smarter
       </h3>
 
       <p className="mx-auto max-w-md text-sm leading-relaxed text-blue-100/60">

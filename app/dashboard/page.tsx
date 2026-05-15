@@ -254,7 +254,7 @@ export default function DashboardPage() {
                   <span className="text-xl">{s.icon}</span>
                   <div>
                     <p
-                      className={`text-[9px] font-bold tracking-widest uppercase mt-2 ${a.icon} opacity-60`}
+                      className={`text-[10px] font-bold tracking-widest uppercase mt-2 ${a.icon} opacity-60`}
                     >
                       {s.label}
                     </p>
@@ -265,7 +265,7 @@ export default function DashboardPage() {
                         s.value
                       )}
                     </p>
-                    <p className={`text-[10px] mt-1 ${a.sub}`}>{s.sub}</p>
+                    <p className={`text-[11px] mt-1 ${a.sub}`}>{s.sub}</p>
                   </div>
                 </div>
               </div>
